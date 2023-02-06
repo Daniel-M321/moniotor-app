@@ -1,9 +1,9 @@
-env.mjs
-
 # logs
 logs
 *.logs
 npm-debug.log*
+
+*.env
 
 node_modules
 .DS_Store

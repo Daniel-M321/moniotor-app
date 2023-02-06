@@ -29,10 +29,6 @@ services:
       - INFLUXDB_DB=db0
       - DOCKER_INFLUXDB_INIT_MODE=setup
       - INFLUXDB_HTTP_AUTH_ENABLED=true
-      - DOCKER_INFLUXDB_INIT_USERNAME=admin
-      - DOCKER_INFLUXDB_INIT_PASSWORD=password
-      - DOCKER_INFLUXDB_INIT_BUCKET=sensors
-      - DOCKER_INFLUXDB_INIT_ORG=nuig
     env_file:
       - ./settings.env
   # nginx:
