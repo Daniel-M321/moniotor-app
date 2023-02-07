@@ -19,15 +19,20 @@
     <div class="container my-5">
         <canvas height="100" id="myChart-diagram"></canvas>
     </div>
+    <Analytics info="hello there"/>
 </template>
 
 <script>
+import Analytics from './Analytic.vue';
 import Charts from 'chart.js/auto'; //add child component that takes analytic data form query to give feedback
 import axios from 'axios';
 import 'chartjs-adapter-moment';
 
 export default {
     name:'myChart',
+    components:{
+      Analytics
+    },
     data() {
         return {
             myChart: null,
