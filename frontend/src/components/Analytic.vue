@@ -2,10 +2,10 @@
     <div class="container my-5">
         <div class="col col-md-center">
             <div class="col card">
-                <div class="col col-lg-1 col-sm-12">
+                <div class="col col-sm-center">
                     <div class="col dataHeader active"> <b>Analytical Data:</b></div>
                 </div>
-                <p>Text:  {{ info }} </p>
+                <p>{{ info }} </p>
 
                 <!-- <button> {{ sensorData }}</button> -->
             </div>

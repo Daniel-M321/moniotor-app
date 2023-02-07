@@ -11,7 +11,7 @@
                 <option>Gas</option>
                 </select>
                 <button @click="queryData">Query</button>
-                <!-- <button> {{ sensorData }}</button> -->
+                <!-- <button> {{ analytics }}</button> -->
             </div>
         </div>
     </div>
@@ -19,12 +19,12 @@
     <div class="container my-5">
         <canvas height="100" id="myChart-diagram"></canvas>
     </div>
-    <Analytics info="hello there"/>
+    <Analytics v-bind:info="analytics"/>
 </template>
 
 <script>
 import Analytics from './Analytic.vue';
-import Charts from 'chart.js/auto'; //add child component that takes analytic data form query to give feedback
+import Charts from 'chart.js/auto';
 import axios from 'axios';
 import 'chartjs-adapter-moment';
 
@@ -38,7 +38,8 @@ export default {
             myChart: null,
             sensorData: null,
             selected: "",
-            ctx: null
+            analytics: String,
+            ctx: null,
         }
     },
     async created() {
@@ -50,6 +51,7 @@ export default {
                         }
                     })
             this.sensorData = data.info
+            this.analytics = data.info.analytics
 
             this.ctx = document.getElementById('myChart-diagram').getContext("2d");
             var gradientFill = this.ctx.createLinearGradient(0,0,0,520);
@@ -90,6 +92,7 @@ export default {
                         }
                     })
                 this.sensorData = data.info
+                this.analytics = data.info.analytics
                 
                 this.myChart.destroy()
                 this.myChart = new Charts(this.ctx, {
