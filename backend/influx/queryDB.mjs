@@ -5,7 +5,7 @@ const queryApi = new InfluxDB({url, token}).getQueryApi(org)
 
 async function queryTime(req_params) {
   console.log('*** QUERY ROWS ***')
-  console.log(req_params) //todo no values in this
+
   const start = fluxDuration('-30d')
   var measurement = "null"
 
