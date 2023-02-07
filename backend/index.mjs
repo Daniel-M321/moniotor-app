@@ -13,11 +13,11 @@ app.get("/", (request, response) => {
 });
 
 app.get("/queryinflux", (request, response) => {
-    queryTime().then(x => {
-        if(!x)
+    queryTime(request.query).then(data => {
+        if(!data)
             response.status(200).json({ message: "There was no data found with that query"});
         else
-            response.status(200).json({sensor: x._measurement});
+            response.status(200).json({info: data});
     })
 });
 

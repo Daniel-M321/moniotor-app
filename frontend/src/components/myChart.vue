@@ -11,7 +11,7 @@
                 <option>Gas</option>
                 </select>
                 <button @click="queryData">Query</button>
-                <button> {{ sensor }}</button>
+                <!-- <button> {{ sensorData }}</button> -->
             </div>
         </div>
     </div>
@@ -22,65 +22,102 @@
 </template>
 
 <script>
-import Charts from 'chart.js/auto';
-//import theChart from '../myChart-data.js';
+import Charts from 'chart.js/auto'; //add child component that takes analytic data form query to give feedback
 import axios from 'axios';
+import 'chartjs-adapter-moment';
 
 export default {
     name:'myChart',
     data() {
         return {
-            //theChart: theChart,
-            loaded: false,
-            sensor: null,
-            selected: ""
+            myChart: null,
+            sensorData: null,
+            selected: "",
+            ctx: null
         }
     },
-    async mounted() {
-        this.loaded = false
-    },
-    methods: {
-        async queryData() {
-            try {
-                const { data } = await axios.get('http://localhost:8080/api')
-                this.sensor = data
+    async created() {
+        const title = "Temperature"
+        try {
+            const { data } = await axios.get('http://localhost:8080/api', {
+                        params: {
+                            measurement: title
+                        }
+                    })
+            this.sensorData = data.info
 
-                const ctx = document.getElementById('myChart-diagram').getContext("2d");
-                var gradientFill = ctx.createLinearGradient(0,0,0,520);
-                gradientFill.addColorStop(0, 'yellow');   
-                gradientFill.addColorStop(1, 'rgba(255, 255, 255, 0)');
-                new Charts(ctx, {
+            this.ctx = document.getElementById('myChart-diagram').getContext("2d");
+            var gradientFill = this.ctx.createLinearGradient(0,0,0,520);
+            gradientFill.addColorStop(0, 'green');   
+            //gradientFill.addColorStop(1, 'rgba(255, 255, 255, 0)');
+            this.myChart = new Charts(this.ctx, {
                 type: 'line',
                 data: {
-                    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                    labels: Object.keys(this.sensorData.lineBarData),
                     datasets: [{
-                    label: "this.sensor.sensor",
-                    data: [12, 19, 3, 5, 2, 3],
-                    borderWidth: 1
+                        label: title,
+                        data: Object.values(this.sensorData.lineBarData),
+                        borderWidth: 1
                     }]
                 },
                 options: {
                     scales: {
-                    y: {
-                        beginAtZero: true
-                    }
+                        x: {
+                            type: 'time'
+                        },
                     }
                 }
-                });
+            });
         
+        } catch (e) {
+            console.error(e)
+            console.log(e)
+            this.selected = e
+        }
+    },
+    methods: {
+        async queryData() {
+            const title = this.selected
+            try {
+                const { data } = await axios.get('http://localhost:8080/api', {
+                        params: {
+                            measurement: title
+                        }
+                    })
+                this.sensorData = data.info
+                
+                this.myChart.destroy()
+                this.myChart = new Charts(this.ctx, {
+                    type: 'line',
+                    data: {
+                        labels: Object.keys(this.sensorData.lineBarData),
+                        datasets: [{
+                            label: title,
+                            data: Object.values(this.sensorData.lineBarData),
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            x: {
+                                type: 'time'
+                            },
+                        }
+                    }
+                });
             } catch (e) {
                 console.error(e)
                 console.log(e)
                 this.selected = e
             }
         }
-    }
+    } //#a7a6a6;
 };
 </script>
 
 <style scoped>
 .cards{
-    box-shadow: 1px 1px 5px #a7a6a6;
+    box-shadow: 1px 1px 5px #4489b7;
     /* border-right: 0.5px solid #a7a6a6; */
     margin: 20px;
     border-radius: 15px;
