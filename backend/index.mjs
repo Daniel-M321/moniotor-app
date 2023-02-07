@@ -1,4 +1,4 @@
-import {queryTime} from './influx/queryDB.mjs'
+import {queryTime} from './src/queryDB.mjs'
 
 import {fileURLToPath} from 'node:url'
 import express from 'express'
