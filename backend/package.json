@@ -8,7 +8,7 @@
     "start": "nodemon index.mjs",
     "errors": "pm2 logs --err index",
     "stop": "pm2 stop index",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha src/test/testAnalyse.mjs"
   },
   "author": "Daniel Millett",
   "license": "ISC",
@@ -17,7 +17,9 @@
     "@influxdata/influxdb-client-apis": "^1.33.0",
     "express": "^4.18.2",
     "influx": "^5.9.3",
-    "pm2": "^5.2.2"
+    "mocha": "^10.2.0",
+    "pm2": "^5.2.2",
+    "unit.js": "^2.1.1"
   },
   "devDependencies": {
     "@types/node": "^18.11.18",
