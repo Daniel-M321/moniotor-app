@@ -1,5 +1,7 @@
 import test from 'unit.js';
 import {analyseBasic, analyseCO} from '../analyse.mjs'
+import {extraAnalysis} from "../assets/analyseText.mjs";
+
 
 
 describe('Temperature value analysis test', function(){
@@ -25,7 +27,7 @@ describe('Temperature value analysis test', function(){
 
         test.assert.equal(
             tempAnalysis,
-            "Average Temperature in this selected period: 32*C. A minimum value of 27*C was found, and a maximum of 36*C. WARNING: Excessive Temperature above 30*C has been detected at the following times, From 14.53:12-2-2023 To 15.02:12-2-2023"
+            "Average Temperature in this selected period: 32*C. A minimum value of 27*C was found, and a maximum of 36*C. WARNING: Excessive Temperature above 30*C has been detected at the following time(s), From 14.53:12-2-2023 To 15.02:12-2-2023"
         )
     })
     it('low temps - two long periods', function(){
@@ -43,7 +45,7 @@ describe('Temperature value analysis test', function(){
 
         test.assert.equal(
             tempAnalysis,
-            "Average Temperature in this selected period: 8.75*C. A minimum value of 6*C was found, and a maximum of 13*C. Warning: Excessive Temperature below 10*C has been detected at the following times, From 14.53:12-2-2023 To 15.07:12-2-2023, From 15.12:12-2-2023 To 15.27:12-2-2023. This excessive Temperature has been detected for over 0.017 hours, cold air inflames lungs and inhibits circulation, increasing the risk of respiratory conditions."
+            "Average Temperature in this selected period: 8.75*C. A minimum value of 6*C was found, and a maximum of 13*C. Warning: Excessive Temperature below 10*C has been detected at the following time(s), From 14.53:12-2-2023 To 15.07:12-2-2023, From 15.12:12-2-2023 To 15.27:12-2-2023. This excessive Temperature has been detected for over 0.017 hour(s), "+extraAnalysis.lowTemperature
         )
     })
 })
@@ -71,7 +73,7 @@ describe('Humidity value analysis test', function(){
 
         test.assert.equal(
             humAnalysis,
-            "Average Humidity in this selected period: 18%. A minimum value of 15% was found, and a maximum of 21%. Warning: Excessive Humidity below 20% has been detected at the following times, From 14.53:12-2-2023 To 15.02:12-2-2023"
+            "Average Humidity in this selected period: 18%. A minimum value of 15% was found, and a maximum of 21%. Warning: Excessive Humidity below 20% has been detected at the following time(s), From 14.53:12-2-2023 To 15.02:12-2-2023"
         )
     })
     it('low humidity, long period', function(){
@@ -84,7 +86,7 @@ describe('Humidity value analysis test', function(){
 
         test.assert.equal(
             humAnalysis,
-            "Average Humidity in this selected period: 18%. A minimum value of 15% was found, and a maximum of 21%. Warning: Excessive Humidity below 20% has been detected at the following times, From 14.53:12-2-2023 To 15.02:12-2-2023. This excessive Humidity has been detected for over 0.017 hours, there is a risk of irritation to skin and nasal passages and possible respiratory illnesses. \nIf you have any respiratory issues, consider raising the humidity for health reasons.\nA humidfier is ideal, or if needed leaving bowls of water in your home but this could lead to other issues."
+            "Average Humidity in this selected period: 18%. A minimum value of 15% was found, and a maximum of 21%. Warning: Excessive Humidity below 20% has been detected at the following time(s), From 14.53:12-2-2023 To 15.02:12-2-2023. This excessive Humidity has been detected for over 0.017 hour(s), "+extraAnalysis.lowHumidity
         )
     })
 })
@@ -98,7 +100,7 @@ describe('CO levels analysis test', function(){
 
         test.assert.equal(
             COAnalysis,
-            "ACTION IS NEEDED. WARNING: Excessive CO levels above 25ppm has been detected at the following times, From 14.57:12-2-2023 To 15.02:12-2-2023. Elavated Co levels have been detected at 14.57:12-2-2023\nAverage CO levels in this selected period: 33ppm. A minimum value of 20ppm was found, and a maximum of 55ppm"
+            "ACTION IS NEEDED. WARNING: Excessive CO levels above 25ppm has been detected at the following time(s), From 14.57:12-2-2023 To 15.02:12-2-2023. Elavated Co levels have been detected at 14.57:12-2-2023\nAverage CO levels in this selected period: 33ppm. A minimum value of 20ppm was found, and a maximum of 55ppm"
         )
     })
 })

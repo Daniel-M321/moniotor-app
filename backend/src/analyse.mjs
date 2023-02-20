@@ -27,6 +27,7 @@ function analyseBasic(data, measurement, threshold, unit, warningPeriod=144){
         if(point > threshold[1]) {                  // online answer of high humidity in UK
             if(highCounter == 0){
                 highDataTime.push(Object.keys(data)[i])  // adding start time
+                highDataTime.push("end of results")
             }
             highCounter++                           // counter on how long there has been high data in one sitting
         }
@@ -34,7 +35,7 @@ function analyseBasic(data, measurement, threshold, unit, warningPeriod=144){
             if(highCounter > highStreak){
                 highStreak = highCounter
             }
-            highDataTime.push(Object.keys(data)[i]) // adding end time
+            highDataTime[highDataTime.length - 1] = Object.keys(data)[i] // adding end time
             highCounter = 0
         }
 
@@ -44,6 +45,7 @@ function analyseBasic(data, measurement, threshold, unit, warningPeriod=144){
         if(point < threshold[0]) {
             if(lowCounter == 0){
                 lowDataTime.push(Object.keys(data)[i])  // adding start time
+                lowDataTime.push("end of results")
             }
             lowCounter++
         }
@@ -51,19 +53,19 @@ function analyseBasic(data, measurement, threshold, unit, warningPeriod=144){
             if(lowCounter > lowStreak){
                 lowStreak = lowCounter
             }
-            lowDataTime.push(Object.keys(data)[i]) // adding end time, TODO if last number, wont be added to list
+            lowDataTime[lowDataTime.length - 1] = Object.keys(data)[i] // adding end time
             lowCounter = 0
         }
     }
 
     const hours = (warningPeriod/60).toFixed(3)
     if(max > threshold[1]) {
-        dataWarning = ". WARNING: Excessive "+measurement+" above "+threshold[1]+unit+" has been detected at the following times"
+        dataWarning = ". WARNING: Excessive "+measurement+" above "+threshold[1]+unit+" has been detected at the following time(s)"
         while(highDataTime.length > 1){
             dataWarning += ", From "+highDataTime.shift()+" To "+highDataTime.shift()
         }
         if(highStreak > warningPeriod){ // readings are every five mins, default = 144 five mins are in 12 hours.
-            dataWarning += ". This excessive "+measurement+" has been detected for over "+hours+" hours, "
+            dataWarning += ". This excessive "+measurement+" has been detected for over "+hours+" hour(s), "
             if(measurement == "Humidity"){
                 dataWarning += extraAnalysis.highHumidity
             }
@@ -76,12 +78,12 @@ function analyseBasic(data, measurement, threshold, unit, warningPeriod=144){
         }
     }
     if(min < threshold[0]) {
-        dataWarning = ". Warning: Excessive "+measurement+" below "+threshold[0]+unit+" has been detected at the following times"
+        dataWarning = ". Warning: Excessive "+measurement+" below "+threshold[0]+unit+" has been detected at the following time(s)"
         while(lowDataTime.length > 1){
             dataWarning += ", From "+lowDataTime.shift()+" To "+lowDataTime.shift()
         }
         if(lowStreak > warningPeriod){ // readings are every five mins, 144 five mins are in 12 hours.
-            dataWarning += ". This excessive "+measurement+" has been detected for over "+hours+" hours, "
+            dataWarning += ". This excessive "+measurement+" has been detected for over "+hours+" hour(s), "
             if(measurement == "Humidity"){
                 dataWarning += extraAnalysis.lowHumidity
             }
@@ -128,6 +130,7 @@ function analyseCO(data, warningPeriod=12){
             }                            
             if(highCounter == 0){
                 highCOTime.push(Object.keys(data)[i])  // adding start time
+                highCOTime.push("end of results")
             }
             if(point > 50){
                 mildWarning = ". Elavated Co levels have been detected at "+Object.keys(data)[i]
@@ -138,7 +141,7 @@ function analyseCO(data, warningPeriod=12){
             if(highCounter > highStreak){
                 highStreak = highCounter
             }
-            highCOTime.push(Object.keys(data)[i]) // adding end time
+            highCOTime[highCOTime.length - 1] = Object.keys(data)[i] // adding end time
             highCounter = 0
         }
 
@@ -152,7 +155,7 @@ function analyseCO(data, warningPeriod=12){
     const diff = latePoint - earlyPoint
 
     if(max > 25) {
-        COWarning = "ACTION IS NEEDED. WARNING: Excessive CO levels above 25ppm has been detected at the following times"
+        COWarning = "ACTION IS NEEDED. WARNING: Excessive CO levels above 25ppm has been detected at the following time(s)"
         while(highCOTime.length > 1){
             COWarning += ", From "+highCOTime.shift()+" To "+highCOTime.shift()
         }
