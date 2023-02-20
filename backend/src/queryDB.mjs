@@ -1,6 +1,6 @@
 import {InfluxDB, flux, fluxDuration} from '@influxdata/influxdb-client'
 import {url, token, org} from '../env.mjs'
-import {analyseData} from './analyse.mjs'
+import {analyseHumidData, analyseTempData} from './analyse.mjs'
 
 const queryApi = new InfluxDB({url, token}).getQueryApi(org)
 
@@ -48,7 +48,13 @@ async function queryTime(req_params) {
           console.log('\nCollect ROWS ERROR')
       })
 
-  const analytics = analyseData(lineBarData)
+  const analytics = ""
+  if(measurement == "Temperature")
+      analytics = analyseTempData(lineBarData)
+  else if(measurement == "Humidity")
+      analytics = analyseHumidData(lineBarData)
+  else if(measurement = "Gas")
+      analytics = analyseTempData(lineBarData)
 
   return ({ scatterData, lineBarData, analytics })
 
