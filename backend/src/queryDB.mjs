@@ -1,6 +1,6 @@
 import {InfluxDB, flux, fluxDuration} from '@influxdata/influxdb-client'
 import {url, token, org} from '../env.mjs'
-import {analyseSTD} from './analyse.mjs'
+import {analyseBasic} from './analyse.mjs'
 
 const queryApi = new InfluxDB({url, token}).getQueryApi(org)
 
@@ -50,11 +50,11 @@ async function queryTime(req_params) {
 
   const analytics = ""
   if(measurement == "Temperature")
-      analytics = analyseSTD(lineBarData, measurement, [10, 30], "*C")
+      analytics = analyseBasic(lineBarData, measurement, [10, 30], "*C") // probs better to do all analysis in above loop^, so not looping twice.
   else if(measurement == "Humidity")
-      analytics = analyseSTD(lineBarData, measurement, [20, 75], "%")
-  else if(measurement == "Gas")
-      analytics = analyseSTD(lineBarData, measurement, [20, 75], "ppm") // probs have to do seperate for Gas as, 3 in 1
+      analytics = analyseBasic(lineBarData, measurement, [20, 75], "%")
+  else if(measurement == "CO")
+      analytics = analyseCO(lineBarData)
 
   return ({ scatterData, lineBarData, analytics })
 

@@ -1,10 +1,10 @@
 import test from 'unit.js';
-import {analyseSTD} from '../analyse.mjs'
+import {analyseBasic, analyseCO} from '../analyse.mjs'
 
 
 describe('Temperature value analysis test', function(){
     it('normal temps', function(){
-        var tempAnalysis = analyseSTD({
+        var tempAnalysis = analyseBasic({
             "14.53:12-2-2023": 23,
             "14.57:12-2-2023": 26,
             "15.02:12-2-2023": 29
@@ -17,7 +17,7 @@ describe('Temperature value analysis test', function(){
     })
     it('high temps', function(){
 
-        const tempAnalysis = analyseSTD({
+        const tempAnalysis = analyseBasic({
             "14.53:12-2-2023": 36,
             "14.57:12-2-2023": 33,
             "15.02:12-2-2023": 27
@@ -30,7 +30,7 @@ describe('Temperature value analysis test', function(){
     })
     it('low temps - two long periods', function(){
 
-        const tempAnalysis = analyseSTD({
+        const tempAnalysis = analyseBasic({
             "14.53:12-2-2023": 9,
             "14.57:12-2-2023": 7,
             "15.02:12-2-2023": 8,
@@ -50,7 +50,7 @@ describe('Temperature value analysis test', function(){
 
 describe('Humidity value analysis test', function(){
     it('normal humidity', function(){
-        var humAnalysis = analyseSTD({
+        var humAnalysis = analyseBasic({
             "14.53:12-2-2023": 50,
             "14.57:12-2-2023": 55,
             "15.02:12-2-2023": 60
@@ -63,7 +63,7 @@ describe('Humidity value analysis test', function(){
     })
     it('low humidity', function(){
 
-        const humAnalysis = analyseSTD({
+        const humAnalysis = analyseBasic({
             "14.53:12-2-2023": 15,
             "14.57:12-2-2023": 18,
             "15.02:12-2-2023": 21
@@ -76,7 +76,7 @@ describe('Humidity value analysis test', function(){
     })
     it('low humidity, long period', function(){
 
-        const humAnalysis = analyseSTD({
+        const humAnalysis = analyseBasic({
             "14.53:12-2-2023": 15,
             "14.57:12-2-2023": 18,
             "15.02:12-2-2023": 21
@@ -85,6 +85,20 @@ describe('Humidity value analysis test', function(){
         test.assert.equal(
             humAnalysis,
             "Average Humidity in this selected period: 18%. A minimum value of 15% was found, and a maximum of 21%. Warning: Excessive Humidity below 20% has been detected at the following times, From 14.53:12-2-2023 To 15.02:12-2-2023. This excessive Humidity has been detected for over 0.017 hours, there is a risk of irritation to skin and nasal passages and possible respiratory illnesses. \nIf you have any respiratory issues, consider raising the humidity for health reasons.\nA humidfier is ideal, or if needed leaving bowls of water in your home but this could lead to other issues."
+        )
+    })
+})
+describe('CO levels analysis test', function(){
+    it('High CO', function(){
+        var COAnalysis = analyseCO({
+            "14.53:12-2-2023": 20,
+            "14.57:12-2-2023": 55,
+            "15.02:12-2-2023": 24
+        })
+
+        test.assert.equal(
+            COAnalysis,
+            "ACTION IS NEEDED. WARNING: Excessive CO levels above 25ppm has been detected at the following times, From 14.57:12-2-2023 To 15.02:12-2-2023. Elavated Co levels have been detected at 14.57:12-2-2023\nAverage CO levels in this selected period: 33ppm. A minimum value of 20ppm was found, and a maximum of 55ppm"
         )
     })
 })
