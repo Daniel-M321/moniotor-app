@@ -51,7 +51,7 @@ function analyseSTD(data, measurement, threshold, unit, warningPeriod=288){
             if(lowCounter > lowStreak){
                 lowStreak = lowCounter
             }
-            lowDataTime.push(Object.keys(data)[i]) // adding end time
+            lowDataTime.push(Object.keys(data)[i]) // adding end time, TODO if last number, wont be added to list
             lowCounter = 0
         }
     }
@@ -67,6 +67,12 @@ function analyseSTD(data, measurement, threshold, unit, warningPeriod=288){
             if(measurement == "Humidity"){
                 dataWarning += extraAnalysis.highHumidity
             }
+            if(measurement == "Temperature"){
+                dataWarning += extraAnalysis.highTemperature
+            }
+            if(measurement == "Gas"){
+                dataWarning += extraAnalysis.highHumidity
+            }
         }
     }
     if(min < threshold[0]) {
@@ -77,6 +83,12 @@ function analyseSTD(data, measurement, threshold, unit, warningPeriod=288){
         if(lowStreak > warningPeriod){ // readings are every five mins, 288 five mins are in 24 hours.
             dataWarning += ". This excessive "+measurement+" has been detected for over "+hours+" hours, "
             if(measurement == "Humidity"){
+                dataWarning += extraAnalysis.lowHumidity
+            }
+            if(measurement == "Temperature"){
+                dataWarning += extraAnalysis.lowTemperature
+            }
+            if(measurement == "Gas"){
                 dataWarning += extraAnalysis.lowHumidity
             }
         }

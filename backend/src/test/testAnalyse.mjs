@@ -28,6 +28,24 @@ describe('Temperature value analysis test', function(){
             "Average Temperature in this selected period: 32*C. A minimum value of 27*C was found, and a maximum of 36*C. WARNING: Excessive Temperature above 30*C has been detected at the following times, From 14.53:12-2-2023 To 15.02:12-2-2023"
         )
     })
+    it('low temps - two long periods', function(){
+
+        const tempAnalysis = analyseSTD({
+            "14.53:12-2-2023": 9,
+            "14.57:12-2-2023": 7,
+            "15.02:12-2-2023": 8,
+            "15.07:12-2-2023": 13,
+            "15.12:12-2-2023": 9,
+            "15.17:12-2-2023": 7,
+            "15.22:12-2-2023": 6,
+            "15.27:12-2-2023": 11,
+        }, "Temperature", [10, 30], "*C", 1)
+
+        test.assert.equal(
+            tempAnalysis,
+            "Average Temperature in this selected period: 8.75*C. A minimum value of 6*C was found, and a maximum of 13*C. Warning: Excessive Temperature below 10*C has been detected at the following times, From 14.53:12-2-2023 To 15.07:12-2-2023, From 15.12:12-2-2023 To 15.27:12-2-2023. This excessive Temperature has been detected for over 0.017 hours, cold air inflames lungs and inhibits circulation, increasing the risk of respiratory conditions."
+        )
+    })
 })
 
 describe('Humidity value analysis test', function(){
@@ -66,7 +84,7 @@ describe('Humidity value analysis test', function(){
 
         test.assert.equal(
             humAnalysis,
-            "Average Humidity in this selected period: 18%. A minimum value of 15% was found, and a maximum of 21%. Warning: Excessive Humidity below 20% has been detected at the following times, From 14.53:12-2-2023 To 15.02:12-2-2023. This excessive Humidity has been detected for over 0.017 hours, there is a risk of irritation to skin and nasal passages and possible respiratory illnesses. If you have any respiratory issues, consider raising the humidity for health reasons."
+            "Average Humidity in this selected period: 18%. A minimum value of 15% was found, and a maximum of 21%. Warning: Excessive Humidity below 20% has been detected at the following times, From 14.53:12-2-2023 To 15.02:12-2-2023. This excessive Humidity has been detected for over 0.017 hours, there is a risk of irritation to skin and nasal passages and possible respiratory illnesses. \nIf you have any respiratory issues, consider raising the humidity for health reasons.\nA humidfier is ideal, or if needed leaving bowls of water in your home but this could lead to other issues."
         )
     })
 })
