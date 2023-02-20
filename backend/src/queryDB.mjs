@@ -1,6 +1,6 @@
 import {InfluxDB, flux, fluxDuration} from '@influxdata/influxdb-client'
 import {url, token, org} from '../env.mjs'
-import {analyseHumidData, analyseTempData} from './analyse.mjs'
+import {analyseSTD} from './analyse.mjs'
 
 const queryApi = new InfluxDB({url, token}).getQueryApi(org)
 
@@ -50,11 +50,11 @@ async function queryTime(req_params) {
 
   const analytics = ""
   if(measurement == "Temperature")
-      analytics = analyseTempData(lineBarData)
+      analytics = analyseSTD(lineBarData, measurement, [10, 30], "*C")
   else if(measurement == "Humidity")
-      analytics = analyseHumidData(lineBarData)
-  else if(measurement = "Gas")
-      analytics = analyseTempData(lineBarData)
+      analytics = analyseSTD(lineBarData, measurement, [20, 75], "%")
+  else if(measurement == "Gas")
+      analytics = analyseSTD(lineBarData, measurement, [20, 75], "ppm") // probs have to do seperate for Gas as, 3 in 1
 
   return ({ scatterData, lineBarData, analytics })
 

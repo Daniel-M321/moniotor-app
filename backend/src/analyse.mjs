@@ -1,12 +1,14 @@
+import {extraAnalysis} from "./assets/analyseText.mjs";
 
-function analyseHumidData(data, warningPeriod=288){
+
+function analyseSTD(data, measurement, threshold, unit, warningPeriod=288){
     var average = 0
     var max = null
     var min = null
     var analytics = ""
-    var humWarning = ""
-    var lowHumTime = []
-    var highHumTime = []
+    var dataWarning = ""
+    var lowDataTime = []
+    var highDataTime = []                            // list of high data start and end times
     var highCounter = 0
     var lowCounter = 0
     var highStreak = 0
@@ -19,91 +21,72 @@ function analyseHumidData(data, warningPeriod=288){
 
         average += point
 
-        if(point > max || max == null) { // max won't have value at start
+        if(point > max || max == null) {            // max won't have value at start
             max = point
         }
-        if(point > 75) {                            // online answer of high humidity in UK
-            highHumTime.push(Object.keys(data)[i])  // list of high humidity times
-            highCounter++                           // counter on how long there has been high humidity in one sitting
+        if(point > threshold[1]) {                  // online answer of high humidity in UK
+            if(highCounter == 0){
+                highDataTime.push(Object.keys(data)[i])  // adding start time
+            }
+            highCounter++                           // counter on how long there has been high data in one sitting
         }
-        else if(highCounter > 0){                   // if humidity goes below threshold, reset counter
+        else if(highCounter > 0){                   // if data goes below threshold, reset counter
             if(highCounter > highStreak){
                 highStreak = highCounter
             }
+            highDataTime.push(Object.keys(data)[i]) // adding end time
             highCounter = 0
         }
 
         if(point < min || min == null) {            // vice versa for low
             min = point 
         }
-        if(point < 20) {
-            lowHumTime.push(Object.keys(data)[i])
+        if(point < threshold[0]) {
+            if(lowCounter == 0){
+                lowDataTime.push(Object.keys(data)[i])  // adding start time
+            }
             lowCounter++
         }
         else if(lowCounter > 0){
             if(lowCounter > lowStreak){
                 lowStreak = lowCounter
             }
+            lowDataTime.push(Object.keys(data)[i]) // adding end time
             lowCounter = 0
         }
-
     }
-    if(max > 75) {
-        humWarning = ". WARNING: Excessive Humidity above 75% have been detected at "+highHumTime
-        if(highStreak > warningPeriod){ // readings are every five mins, 288 five mins are in 24 hours.
-            humWarning += ". This excessive humidity has been detected for over 24 hours, there is a risk of mould growth at this level. This level of humidity can also be unhealthy and leave a person lethargic."
+
+    const hours = (warningPeriod/60).toFixed(3)
+    if(max > threshold[1]) {
+        dataWarning = ". WARNING: Excessive "+measurement+" above "+threshold[1]+unit+" has been detected at the following times"
+        while(highDataTime.length > 1){
+            dataWarning += ", From "+highDataTime.shift()+" To "+highDataTime.shift()
+        }
+        if(highStreak > warningPeriod){ // readings are every five mins, default = 288 five mins are in 24 hours.
+            dataWarning += ". This excessive "+measurement+" has been detected for over "+hours+" hours, "
+            if(measurement == "Humidity"){
+                dataWarning += extraAnalysis.highHumidity
+            }
         }
     }
-    if(min < 20) {
-        humWarning = ". Warning: Excessive Humidity below 20% have been detected at "+lowHumTime
+    if(min < threshold[0]) {
+        dataWarning = ". Warning: Excessive "+measurement+" below "+threshold[0]+unit+" has been detected at the following times"
+        while(lowDataTime.length > 1){
+            dataWarning += ", From "+lowDataTime.shift()+" To "+lowDataTime.shift()
+        }
         if(lowStreak > warningPeriod){ // readings are every five mins, 288 five mins are in 24 hours.
-            humWarning += ". This excessive humidity has been detected for over 24 hours, there is a risk of irritation to skin and nasal passages and possible respiratory illnesses. If you have any respiratory issues, consider raising the humidity for health reasons."
+            dataWarning += ". This excessive "+measurement+" has been detected for over "+hours+" hours, "
+            if(measurement == "Humidity"){
+                dataWarning += extraAnalysis.lowHumidity
+            }
         }
     }
 
     average = average/dataLength
-    analytics = "Average Humidity in this selected period: "+average+"%. A minimum value of "+min+"% was found, and a maximum of "+max+"%"+humWarning
+    analytics = "Average "+measurement+" in this selected period: "+average+unit+". A minimum value of "+min+unit+" was found, and a maximum of "+max+unit+dataWarning
     
     console.log(analytics)
     return analytics
 }
 
-function analyseTempData(data){
-    var average = 0
-    var max = null
-    var min = null
-    var analytics = ""
-    var tempWarning = ""
-    var lowTempTime = []
-    var highTempTime = []
-
-    const dataLength = Object.keys(data).length
-    for(var i = 0; i < dataLength; i++)
-    {
-        var point = Object.values(data)[i]
-
-        average += point
-
-        if(point > max || max == null)
-            max = point
-        if(point > 30)
-            highTempTime.push(Object.keys(data)[i])
-        if(point < min || min == null)
-            min = point
-        if(point < 10)
-            lowTempTime.push(Objects.keys(data)[i])
-
-    }
-    if(max > 30)
-        tempWarning = ". WARNING: Excessive temperatures above 30*C have been detected at "+highTempTime
-    if(min < 10)
-        tempWarning = ". Warning: Excessive temperatures below 10*C have been detected at "+lowTempTime
-
-    average = average/dataLength
-    analytics = "Average temperature in this selected period: "+average+"*C. A minimum value of "+min+"*C was found, and a maximum of "+max+"*C"+tempWarning
-    
-    console.log(analytics)
-    return analytics
-}
-
-export {analyseHumidData, analyseTempData}
+export {analyseSTD}
