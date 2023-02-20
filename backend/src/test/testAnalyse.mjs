@@ -95,12 +95,12 @@ describe('CO levels analysis test', function(){
         var COAnalysis = analyseCO({
             "14.53:12-2-2023": 20,
             "14.57:12-2-2023": 55,
-            "15.02:12-2-2023": 24
+            "15.02:12-2-2023": 54
         })
 
         test.assert.equal(
             COAnalysis,
-            "ACTION IS NEEDED. WARNING: Excessive CO levels above 25ppm has been detected at the following time(s), From 14.57:12-2-2023 To 15.02:12-2-2023. Elavated Co levels have been detected at 14.57:12-2-2023\nAverage CO levels in this selected period: 33ppm. A minimum value of 20ppm was found, and a maximum of 55ppm"
+            "ACTION IS NEEDED. WARNING: Excessive CO levels above 25ppm has been detected at the following time(s), From 14.57:12-2-2023 To end of results. Elavated Co levels have been detected at 15.02:12-2-2023\nAverage CO levels in this selected period: 43ppm. A minimum value of 20ppm was found, and a maximum of 55ppm"
         )
     })
 })
