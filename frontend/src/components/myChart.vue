@@ -1,22 +1,38 @@
 <template>
+    <!-- <TimePeriod :from="startDate" :to="endDate" @period="queryPeriod"/> -->
     <div class="container">
         <div class="row">
             <div class="col cards">
                 <div>Selected: {{ selected }}</div>
 
                 <select v-model="selected">
-                <option disabled value="">Please select one</option>
-                <option>Temperature</option>
-                <option>Humidity</option>
-                <option>CO</option>
+                    <option disabled value="">Please select one</option>
+                    <option>Temperature</option>
+                    <option>Humidity</option>
+                    <option>CO</option>
                 </select>
-                <button @click="queryData">Query</button>
+                <button @click="queryData"> Go!</button>
+            </div>
+            <div class="col cards">
+                <p class="container">How many days?: {{ days }}
+                    <input v-model="days" placeholder="edit me" />
+                </p>
+                <p class="container">How many months?: {{ months }}
+                    <input v-model="months" placeholder="edit me" />
+                </p>
             </div>
         </div>
     </div>
 
     <div class="container my-5">
         <canvas height="100" id="myChart-diagram"></canvas>
+    </div>
+    <div class="container my-5">
+        <div class="row">
+            <small class="col today active">{{ startDate }}</small>
+            <small class="col compared text-muted disabled"> TO </small>
+            <small class="col previous">{{ endDate }}</small>
+        </div>
     </div>
     <Analytics v-bind:info="analytics"/>
 </template>
@@ -30,15 +46,19 @@ import 'chartjs-adapter-moment';
 export default {
     name:'myChart',
     components:{
-      Analytics
+        Analytics
     },
     data() {
         return {
             myChart: null,
             sensorData: null,
             selected: "",
-            analytics: String,
             ctx: null,
+            analytics: String,
+            startDate: String,
+            endDate: String,
+            days: "",
+            months: "",
         }
     },
     async created() {
@@ -52,6 +72,11 @@ export default {
             this.sensorData = data.info
             this.analytics = data.info.analytics
 
+            const dataTimes = Object.keys(this.sensorData.lineBarData)
+            this.startDate = dataTimes[0]
+            const dataLength = dataTimes.length
+            this.endDate = dataTimes[dataLength-1]
+
             this.ctx = document.getElementById('myChart-diagram').getContext("2d");
             var gradientFill = this.ctx.createLinearGradient(0,0,0,520);
             gradientFill.addColorStop(0, 'green');   
@@ -59,7 +84,7 @@ export default {
             this.myChart = new Charts(this.ctx, {
                 type: 'line',
                 data: {
-                    labels: Object.keys(this.sensorData.lineBarData),
+                    labels: dataTimes,
                     datasets: [{
                         label: title,
                         data: Object.values(this.sensorData.lineBarData),
@@ -75,7 +100,7 @@ export default {
         }
     },
     methods: {
-        async queryData() {
+        async queryData() { //todo might be moving the query button to TimePeriod
             const title = this.selected
             try {
                 const { data } = await axios.get('http://localhost:8080/api', {
@@ -85,12 +110,17 @@ export default {
                     })
                 this.sensorData = data.info
                 this.analytics = data.info.analytics
+
+                const dataTimes = Object.keys(this.sensorData.lineBarData)
+                this.startDate = dataTimes[0]
+                const dataLength = dataTimes.length
+                this.endDate = dataTimes[dataLength-1] // todo put into method
                 
                 this.myChart.destroy()
                 this.myChart = new Charts(this.ctx, {
                     type: 'line',
                     data: {
-                        labels: Object.keys(this.sensorData.lineBarData),
+                        labels: dataTimes,
                         datasets: [{
                             label: title,
                             data: Object.values(this.sensorData.lineBarData),
@@ -118,5 +148,14 @@ export default {
 }
 .cards:nth-child(4){
     border: none; 
+}
+.today, .previous, .compared{
+    border: 1px solid #9b9b9b9f;
+    border-radius: 15px;
+    text-align: center;
+    padding: 5px;
+}
+.compared{
+    border: none;
 }
 </style>
