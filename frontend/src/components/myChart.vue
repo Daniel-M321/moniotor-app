@@ -50,7 +50,7 @@ export default {
                             measurement: title
                         }
                     })
-            this.sensorData = data.info
+            this.sensorData = data.info     //todo dates are very weird on x axis, not good info. Also can get date to put in header to show period?
             this.analytics = data.info.analytics
 
             this.ctx = document.getElementById('myChart-diagram').getContext("2d");

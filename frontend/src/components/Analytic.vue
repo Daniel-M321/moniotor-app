@@ -5,7 +5,7 @@
                 <div class="col col-sm-center">
                     <div class="col dataHeader active"> <b>Analytical Data:</b></div>
                 </div>
-                <p>{{ info }} </p>
+                <p> {{ info }} </p>
 
                 <!-- <button> {{ sensorData }}</button> -->
             </div>
@@ -37,4 +37,7 @@ export default {
     text-align: center;
     padding: 5px;
 }
+div { /* fixes the issue with \n & \t not working in html */
+      white-space: pre-wrap;
+  }
 </style>
