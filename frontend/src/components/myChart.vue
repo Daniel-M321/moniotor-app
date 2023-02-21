@@ -8,7 +8,7 @@
                 <option disabled value="">Please select one</option>
                 <option>Temperature</option>
                 <option>Humidity</option>
-                <option>Gas</option>
+                <option>CO</option>
                 </select>
                 <button @click="queryData">Query</button>
                 <!-- <button> {{ analytics }}</button> -->
@@ -50,7 +50,7 @@ export default {
                             measurement: title
                         }
                     })
-            this.sensorData = data.info     //todo dates are very weird on x axis, not good info. Also can get date to put in header to show period?
+            this.sensorData = data.info     //todo dates are very weird on x axis, because of type time parameter below. Also can get date to put in header to show period?
             this.analytics = data.info.analytics
 
             this.ctx = document.getElementById('myChart-diagram').getContext("2d");
@@ -66,13 +66,6 @@ export default {
                         data: Object.values(this.sensorData.lineBarData),
                         borderWidth: 1
                     }]
-                },
-                options: {
-                    scales: {
-                        x: {
-                            type: 'time'
-                        },
-                    }
                 }
             });
         
@@ -104,13 +97,6 @@ export default {
                             data: Object.values(this.sensorData.lineBarData),
                             borderWidth: 1
                         }]
-                    },
-                    options: {
-                        scales: {
-                            x: {
-                                type: 'time'
-                            },
-                        }
                     }
                 });
             } catch (e) {
