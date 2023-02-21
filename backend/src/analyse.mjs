@@ -14,7 +14,12 @@ function analyseBasic(data, measurement, threshold, unit, warningPeriod=144){
     var highStreak = 0
     var lowStreak = 0
 
-    const dataLength = Object.keys(data).length
+    const dataLength = Object.keys(data).length     //todo checks for data send more than 5 minutes apart, means sensors didnt record, could be large gap
+
+    if(dataLength == 0){
+        return "There is no data for "+measurement+" in this period..."
+    }
+
     for(var i = 0; i < dataLength; i++)
     {
         var point = Object.values(data)[i]
@@ -115,6 +120,11 @@ function analyseCO(data, warningPeriod=12){
     var highStreak = 0
 
     const dataLength = Object.keys(data).length
+
+    if(dataLength == 0){
+        return "There is no data for CO in this period..."
+    }
+
     for(var i = 0; i < dataLength; i++)
     {
         var point = Object.values(data)[i]
