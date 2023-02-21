@@ -4,6 +4,6 @@ export const extraAnalysis = {
     "highTemperature": "these high values has the potential to increase risk of heat stress, heat exhaustion and heatstroke. \nChildren, the elderly, and those with psychiatric, cardiovascular and pulmonary illnesses have a weaker physiological response to heat.\nPlease consider clearing ventilation for air, or installing fans/air conditioning.",
     "lowTemperature": "cold air inflames lungs and inhibits circulation, increasing the risk of respiratory conditions.",
     "dangerousCO": "\nCheck air ducts and ventilation services. Open your windows immediately and let fresh air in. Evaluate and monitor your gas applications or methods of heat. ",
-    "risingCO": "Please ensure ventilation has not been blocked in your home, especially chimneys or gas pipes.",
+    "risingCO": "Please ensure ventilation has not been blocked in your home, especially chimneys or gas pipes.\n",
 }
 //https://www.ncbi.nlm.nih.gov/books/NBK535294/

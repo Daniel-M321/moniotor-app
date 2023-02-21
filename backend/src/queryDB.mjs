@@ -1,6 +1,6 @@
 import {InfluxDB, flux, fluxDuration} from '@influxdata/influxdb-client'
 import {url, token, org} from '../env.mjs'
-import {analyseBasic} from './analyse.mjs'
+import {analyseBasic, analyseCO} from './analyse.mjs'
 
 const queryApi = new InfluxDB({url, token}).getQueryApi(org)
 
@@ -38,8 +38,9 @@ async function queryTime(req_params) {
       .collectRows(fluxQuery /*, you can specify a row mapper as a second arg */)
       .then(data => {
           data.forEach((x) => {
+              var time = dateFormatter(new Date(x._time))
               scatterData.push({ x: x._time, y: x._value });
-              lineBarData[x._time] = x._value
+              lineBarData[time] = x._value
           })
           //console.log('\nCollect ROWS SUCCESS')
       })
@@ -58,6 +59,10 @@ async function queryTime(req_params) {
 
   return ({ scatterData, lineBarData, analytics })
 
+}
+
+function dateFormatter(date){
+  return date.toLocaleDateString()+","+date.getHours()+":"+date.getMinutes()
 }
 
 export {queryTime}

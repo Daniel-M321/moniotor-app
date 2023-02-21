@@ -8,10 +8,9 @@
                 <option disabled value="">Please select one</option>
                 <option>Temperature</option>
                 <option>Humidity</option>
-                <option>Gas</option>
+                <option>CO</option>
                 </select>
                 <button @click="queryData">Query</button>
-                <!-- <button> {{ analytics }}</button> -->
             </div>
         </div>
     </div>
@@ -66,13 +65,6 @@ export default {
                         data: Object.values(this.sensorData.lineBarData),
                         borderWidth: 1
                     }]
-                },
-                options: {
-                    scales: {
-                        x: {
-                            type: 'time'
-                        },
-                    }
                 }
             });
         
@@ -104,13 +96,6 @@ export default {
                             data: Object.values(this.sensorData.lineBarData),
                             borderWidth: 1
                         }]
-                    },
-                    options: {
-                        scales: {
-                            x: {
-                                type: 'time'
-                            },
-                        }
                     }
                 });
             } catch (e) {
