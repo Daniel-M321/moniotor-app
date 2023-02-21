@@ -11,7 +11,6 @@
                 <option>CO</option>
                 </select>
                 <button @click="queryData">Query</button>
-                <!-- <button> {{ analytics }}</button> -->
             </div>
         </div>
     </div>
@@ -50,7 +49,7 @@ export default {
                             measurement: title
                         }
                     })
-            this.sensorData = data.info     //todo dates are very weird on x axis, because of type time parameter below. Also can get date to put in header to show period?
+            this.sensorData = data.info
             this.analytics = data.info.analytics
 
             this.ctx = document.getElementById('myChart-diagram').getContext("2d");
