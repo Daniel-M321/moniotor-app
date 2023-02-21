@@ -96,7 +96,7 @@ function analyseBasic(data, measurement, threshold, unit, warningPeriod=144){
         }
     }
 
-    average = average/dataLength
+    average = Math.round(average/dataLength)
     analytics = "Average "+measurement+" in this selected period: "+average+unit+". A minimum value of "+min+unit+" was found, and a maximum of "+max+unit+dataWarning
     
     console.log(analytics)
@@ -172,7 +172,7 @@ function analyseCO(data, warningPeriod=12){
         analytics += "CO levels have fallen this period. This is a good outcome."
     }
 
-    average = average/dataLength
+    average = Math.round(average/dataLength)
     analytics += COWarning+"\nAverage CO levels in this selected period: "+average+"ppm. A minimum value of "+min+"ppm was found, and a maximum of "+max+"ppm"
 
     console.log(analytics)

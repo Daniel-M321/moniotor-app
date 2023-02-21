@@ -48,7 +48,7 @@ async function queryTime(req_params) {
           console.log('\nCollect ROWS ERROR')
       })
 
-  const analytics = ""
+  var analytics = ""
   if(measurement == "Temperature")
       analytics = analyseBasic(lineBarData, measurement, [10, 30], "*C") // probs better to do all analysis in above loop^, so not looping twice.
   else if(measurement == "Humidity")
