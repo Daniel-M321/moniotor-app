@@ -13,6 +13,7 @@ services:
       - INFLUXDB_HOST=influxdb
       - INFLUXDB_PORT=8086
       - INFLUXDB_DATABASE=db0
+    container_name: moniotor-webapp-1
   backend:
     image:  danmillett/moniotor-back:1.0
     # build:
@@ -22,6 +23,7 @@ services:
     #   - ./settings.env
     ports:
       - 8081:8081
+    container_name: moniotor-backend-1
   influxdb:
     image: influxdb:latest
     ports:
@@ -30,6 +32,7 @@ services:
       - INFLUXDB_DB=db0
       - DOCKER_INFLUXDB_INIT_MODE=setup
       - INFLUXDB_HTTP_AUTH_ENABLED=true
+    container_name: moniotor-influxdb-1
     # env_file:
     #   - ./settings.env
   # nginx:
