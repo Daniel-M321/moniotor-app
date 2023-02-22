@@ -1,10 +1,10 @@
 version: '3'
 services:
   webapp:
-    #image: danmillett/moniotornew:1.0
-    build:
-        context: ./frontend
-        dockerfile: Dockerfile
+    image:  danmillett/moniotor-front:1.0
+    # build:
+    #     context: ./frontend
+    #     dockerfile: Dockerfile
     ports:
       - 8080:80
     depends_on:
@@ -14,13 +14,14 @@ services:
       - INFLUXDB_PORT=8086
       - INFLUXDB_DATABASE=db0
   backend:
-      build:
-        context: ./backend
-        dockerfile: Dockerfile
-      env_file:
-        - ./settings.env
-      ports:
-        - 8081:8081
+    image:  danmillett/moniotor-back:1.0
+    # build:
+    #   context: ./backend
+    #   dockerfile: Dockerfile
+    # env_file:
+    #   - ./settings.env
+    ports:
+      - 8081:8081
   influxdb:
     image: influxdb:latest
     ports:
@@ -29,8 +30,8 @@ services:
       - INFLUXDB_DB=db0
       - DOCKER_INFLUXDB_INIT_MODE=setup
       - INFLUXDB_HTTP_AUTH_ENABLED=true
-    env_file:
-      - ./settings.env
+    # env_file:
+    #   - ./settings.env
   # nginx:
   #   image: nginx:stable-alpine
   #   ports:
