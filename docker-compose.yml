@@ -15,7 +15,7 @@ services:
       - INFLUXDB_DATABASE=db0
     container_name: moniotor-webapp-1
   backend:
-    image:  danmillett/moniotor-back:1.0
+    image:  danmillett/moniotor-back:2.0
     # build:
     #   context: ./backend
     #   dockerfile: Dockerfile
