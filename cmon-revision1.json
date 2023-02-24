@@ -2,7 +2,7 @@
     "containerDefinitions": [
         {
             "name": "moniotor-webapp-1",
-            "image": "danmillett/moniotor-front:1.0",
+            "imageUri": "danmillett/moniotor-front:1.0",
             "cpu": 0,
             "portMappings": [
                 {
@@ -30,7 +30,7 @@
         },
         {
             "name": "moniotor-backend-1",
-            "image": "danmillett/moniotor-back:2.0",
+            "imageUri": "danmillett/moniotor-back:2.0",
             "cpu": 0,
             "portMappings": [
                 {
@@ -58,7 +58,7 @@
         },
         {
             "name": "moniotor-influxdb-1",
-            "image": "influxdb:latest",
+            "imageUri": "influxdb:latest",
             "cpu": 0,
             "portMappings": [
                 {
