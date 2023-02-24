@@ -1,5 +1,4 @@
 {
-    "taskDefinitionArn": "arn:aws:ecs:eu-west-1:641143076957:task-definition/cmon:1",
     "containerDefinitions": [
         {
             "name": "moniotor-webapp-1",
@@ -85,26 +84,5 @@
             "mountPoints": [],
             "volumesFrom": []
         }
-    ],
-    "family": "cmon",
-    "networkMode": "bridge",
-    "revision": 1,
-    "volumes": [],
-    "status": "ACTIVE",
-    "placementConstraints": [],
-    "compatibilities": [
-        "EC2"
-    ],
-    "requiresCompatibilities": [
-        "EC2"
-    ],
-    "cpu": "1024",
-    "memory": "3072",
-    "runtimePlatform": {
-        "cpuArchitecture": "X86_64",
-        "operatingSystemFamily": "LINUX"
-    },
-    "registeredAt": "2023-02-23T20:39:36.983Z",
-    "registeredBy": "arn:aws:iam::641143076957:root",
-    "tags": []
+    ]
 }
