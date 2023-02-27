@@ -7,11 +7,21 @@ const queryApi = new InfluxDB({url, token}).getQueryApi(org)
 async function queryTime(req_params) {
   console.log('*** QUERY ROWS ***')
 
-  const start = fluxDuration('-30d')
   var measurement = "null"
+  var period = "-30d"
 
   if(req_params.measurement)
     measurement = req_params.measurement
+
+  if(req_params.period != "" && req_params.p_unit != "")
+    var period = req_params.period
+    var unit = req_params.p_unit
+    if(period == 0)
+      console.log("period of 0 entered: defaulted to 30")
+    else if(unit == "Month(s)" || unit == "Hour(s)" || unit == "Week(s)")
+      period = "-"+period+unit.charAt(0).toLowerCase()
+
+  const start = fluxDuration(period)
 
   const fluxQuery = flux`from(bucket:"sensors") 
     |> range(start: ${start}, stop: now()) 
