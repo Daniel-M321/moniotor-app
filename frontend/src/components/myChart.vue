@@ -65,7 +65,7 @@ export default {
     async created() {
         const title = "Temperature"
         try {
-            const { data } = await axios.get(this.backend_url, {
+            const { data } = await axios.get('http://localhost/api', {
                         params: {
                             measurement: title
                         }
