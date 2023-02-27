@@ -1,33 +1,29 @@
 version: '3'
 services:
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+    depends_on:
+      - webapp
   webapp:
     image:  danmillett/moniotor-front:2.0
-    # build:
-    #     context: ./frontend
-    #     dockerfile: Dockerfile
-    ports:
-      - 8080:80
     depends_on:
       - influxdb
     environment:
       - INFLUXDB_HOST=influxdb
       - INFLUXDB_PORT=8086
       - INFLUXDB_DATABASE=db0
-      - BACKEND_URL=http://moniotor.com:8086
+      #- BACKEND_URL=http://moniotor.com:8086
       - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${DOCKER_INFLUXDB_INIT_ADMIN_TOKEN}
-    container_name: moniotor-webapp-1
+    container_name: frontend
   backend:
     image:  danmillett/moniotor-back:2.0
-    # build:
-    #   context: ./backend
-    #   dockerfile: Dockerfile
-    # env_file:
-    #   - ./settings.env
     environment:
       - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${DOCKER_INFLUXDB_INIT_ADMIN_TOKEN}
       - DOCKER_INFLUXDB_INIT_PASSWORD=${DOCKER_INFLUXDB_INIT_PASSWORD}
-    ports:
-      - 8081:8081
     container_name: moniotor-backend-1
   influxdb:
     image: influxdb:latest
@@ -42,11 +38,3 @@ services:
       - DOCKER_INFLUXDB_INIT_BUCKET=sensors
       - DOCKER_INFLUXDB_INIT_ORG=nuig
     container_name: moniotor-influxdb-1
-    # env_file:
-    #   - ./settings.env
-  # nginx:
-  #   image: nginx:stable-alpine
-  #   ports:
-  #     - 80:80
-  #   depends_on:
-  #     - webapp
