@@ -14,12 +14,17 @@
                 <button @click="queryData"> Go!</button>
             </div>
             <div class="col cards">
-                <p class="container">How many days?: {{ days }}
-                    <input v-model="days" placeholder="edit me" />
+                <p class="container">Query Period?:
+                    <input v-model="period" placeholder="edit me" />
                 </p>
-                <p class="container">How many months?: {{ months }}
-                    <input v-model="months" placeholder="edit me" />
-                </p>
+                <div>Query Unit: {{ period }} {{ periodUnit }}</div>
+
+                <select v-model="periodUnit">
+                    <option disabled value="">Please select one</option>
+                    <option>Month(s)</option>
+                    <option>Week(s)</option>
+                    <option>Hour(s)</option>
+                </select>
             </div>
         </div>
     </div>
@@ -57,8 +62,8 @@ export default {
             analytics: String,
             startDate: String,
             endDate: String,
-            days: "",
-            months: "",
+            period: "",
+            periodUnit: "",
         }
     },
     async created() {
@@ -66,7 +71,9 @@ export default {
         try {
             const { data } = await axios.get(process.env['VUE_APP_BACKEND_URL']+'/api', {
                         params: {
-                            measurement: title
+                            measurement: title,
+                            period: this.period,
+                            p_unit: this.periodUnit
                         }
                     })
             this.sensorData = data.info
@@ -100,7 +107,7 @@ export default {
         }
     },
     methods: {
-        async queryData() { //todo might be moving the query button to TimePeriod
+        async queryData() {
             const title = this.selected
             try {
                 const { data } = await axios.get(process.env['VUE_APP_BACKEND_URL']+'/api', {
