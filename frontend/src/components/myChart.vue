@@ -59,13 +59,12 @@ export default {
             endDate: String,
             days: "",
             months: "",
-            backend_url: process.env["BACKEND_URL"]+'/api',
         }
     },
     async created() {
         const title = "Temperature"
         try {
-            const { data } = await axios.get('http://localhost/api', {
+            const { data } = await axios.get(process.env['VUE_APP_BACKEND_URL']+'/api', {
                         params: {
                             measurement: title
                         }
@@ -104,7 +103,7 @@ export default {
         async queryData() { //todo might be moving the query button to TimePeriod
             const title = this.selected
             try {
-                const { data } = await axios.get(this.backend_url, {
+                const { data } = await axios.get(process.env['VUE_APP_BACKEND_URL']+'/api', {
                         params: {
                             measurement: title
                         }
