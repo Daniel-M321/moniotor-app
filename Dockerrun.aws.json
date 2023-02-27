@@ -3,7 +3,7 @@
     "containerDefinitions": [
         {
             "name": "moniotor-webapp-1",
-            "image": "danmillett/moniotor-front:1.0",
+            "image": "danmillett/moniotor-front:2.0",
             "hostname": "moniotor-webapp-1",
             "portMappings": [
                 {
