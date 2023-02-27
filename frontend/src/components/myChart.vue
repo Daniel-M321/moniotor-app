@@ -39,12 +39,13 @@ export default {
             selected: "",
             analytics: String,
             ctx: null,
+            backend_url: process.env["BACKEND_URL"]+'/api',
         }
     },
     async created() {
         const title = "Temperature"
         try {
-            const { data } = await axios.get('http://localhost:8080/api', {
+            const { data } = await axios.get(this.backend_url, {
                         params: {
                             measurement: title
                         }
@@ -78,7 +79,7 @@ export default {
         async queryData() {
             const title = this.selected
             try {
-                const { data } = await axios.get('http://localhost:8080/api', {
+                const { data } = await axios.get(this.backend_url, {
                         params: {
                             measurement: title
                         }
