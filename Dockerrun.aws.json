@@ -1,0 +1,57 @@
+{
+    "AWSEBDockerrunVersion": "3",
+    "containerDefinitions": [
+        {
+            "name": "moniotor-nginx-1",
+            "image": "danmillett/moniotor-nginx:1.0",
+            "hostname": "moniotor-nginx-1",
+            "portMappings": [
+                {
+                    "hostPort": 80,
+                    "containerPort": 80
+                }
+            ],
+            "essential": true,
+            "memory": 300
+        },
+        {
+            "name": "frontend",
+            "image": "danmillett/moniotor-front:3.0",
+            "hostname": "frontend",
+            "portMappings": [
+                {
+                    "hostPort": 3000,
+                    "containerPort": 3000
+                }
+            ],
+            "essential": true,
+            "memory": 300
+        },
+        {
+            "name": "moniotor-backend-1",
+            "image": "danmillett/moniotor-back:3.0",
+            "hostname": "moniotor-backend-1",
+            "portMappings": [
+                {
+                    "hostPort": 8081,
+                    "containerPort": 8081
+                }
+            ],
+            "essential": false,
+            "memory": 300
+        },
+        {
+            "name": "moniotor-influxdb-1",
+            "image": "influxdb:latest",
+            "hostname": "moniotor-influxdb-1",
+            "portMappings": [
+                {
+                    "hostPort": 8086,
+                    "containerPort": 8086
+                }
+            ],
+            "essential": false,
+            "memory": 300
+        }
+    ]
+}

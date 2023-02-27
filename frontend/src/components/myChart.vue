@@ -64,7 +64,7 @@ export default {
     async created() {
         const title = "Temperature"
         try {
-            const { data } = await axios.get('http://localhost:8080/api', {
+            const { data } = await axios.get(process.env['VUE_APP_BACKEND_URL']+'/api', {
                         params: {
                             measurement: title
                         }
@@ -103,7 +103,7 @@ export default {
         async queryData() { //todo might be moving the query button to TimePeriod
             const title = this.selected
             try {
-                const { data } = await axios.get('http://localhost:8080/api', {
+                const { data } = await axios.get(process.env['VUE_APP_BACKEND_URL']+'/api', {
                         params: {
                             measurement: title
                         }
