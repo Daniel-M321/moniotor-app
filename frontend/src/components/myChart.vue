@@ -3,7 +3,7 @@
     <div class="container">
         <div class="row">
             <div class="col cards">
-                <div>Selected: {{ selected }} for... {{ period }} {{ periodUnit }}</div>
+                <div>What measurement would you like to query? </div>
 
                 <select v-model="selected">
                     <option disabled value="">Please select one</option>
@@ -11,21 +11,20 @@
                     <option>Humidity</option>
                     <option>CO</option>
                 </select>
-                <button @click="queryData"> Go!</button>
+                <p>Current Query: {{ selected }} {{ period }} {{ periodUnit }} ago</p>
             </div>
             <div class="col cards">
-                <div class="container">Query Period?:
+                <div class="container">Please enter a value and unit of time for your query (Default = 30 days):
                     <div>
                         <input v-model="period" placeholder="edit me" />
+                        <select v-model="periodUnit">
+                            <option disabled value="">Please select one</option>
+                            <option>Month(s)</option>
+                            <option>Week(s)</option>
+                            <option>Hour(s)</option>
+                        </select>
+                        <button @click="queryData"> Go!</button>
                     </div>
-                    <div>Query Unit?:</div>
-
-                    <select v-model="periodUnit">
-                        <option disabled value="">Please select one</option>
-                        <option>Month(s)</option>
-                        <option>Week(s)</option>
-                        <option>Hour(s)</option>
-                    </select>
                 </div>
             </div>
         </div>
@@ -64,8 +63,8 @@ export default {
             analytics: String,
             startDate: String,
             endDate: String,
-            period: "",
-            periodUnit: "_",
+            period: "30",
+            periodUnit: "Day(s)",
         }
     },
     async created() {
