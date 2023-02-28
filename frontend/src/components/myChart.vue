@@ -70,7 +70,7 @@ export default {
     async created() {
         const title = "Temperature"
         try {
-            const { data } = await axios.get('http://moniotor.eu-west-1.elasticbeanstalk.com/api', {
+            const { data } = await axios.get('http://moniotor.eu-west-1.elasticbeanstalk.com/api', { //todo fix this
                         params: {
                             measurement: title,
                             period: this.period,

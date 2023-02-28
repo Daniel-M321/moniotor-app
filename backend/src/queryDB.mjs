@@ -18,7 +18,7 @@ async function queryTime(req_params) {
     var unit = req_params.p_unit
     if(period == 0)
       console.log("period of 0 entered: defaulted to 30")
-    else if(unit == "Month(s)" || unit == "Hour(s)" || unit == "Week(s)")
+    else if(unit == "Month(s)" || unit == "Hour(s)" || unit == "Week(s)" || unit == "Day(s)")
       period = "-"+period+unit.charAt(0).toLowerCase()
 
   const start = fluxDuration(period)
