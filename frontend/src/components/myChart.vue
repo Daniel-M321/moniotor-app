@@ -111,7 +111,7 @@ export default {
         async queryData() {
             const title = this.selected
             try {
-                const { data } = await axios.get(process.env['VUE_APP_BACKEND_URL']+'/api', {
+                const { data } = await axios.get('http://moniotor.eu-west-1.elasticbeanstalk.com/api', {
                         params: {
                             measurement: title,
                             period: this.period,
