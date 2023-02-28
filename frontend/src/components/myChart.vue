@@ -112,7 +112,9 @@ export default {
             try {
                 const { data } = await axios.get(process.env['VUE_APP_BACKEND_URL']+'/api', {
                         params: {
-                            measurement: title
+                            measurement: title,
+                            period: this.period,
+                            p_unit: this.periodUnit
                         }
                     })
                 this.sensorData = data.info
