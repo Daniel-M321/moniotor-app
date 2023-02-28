@@ -3,7 +3,7 @@
     "containerDefinitions": [
         {
             "name": "moniotor-nginx-1",
-            "image": "danmillett/moniotor-nginx:1.0",
+            "image": "danmillett/moniotor-nginx:latest",
             "hostname": "moniotor-nginx-1",
             "portMappings": [
                 {
