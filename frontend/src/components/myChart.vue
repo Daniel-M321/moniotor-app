@@ -3,7 +3,7 @@
     <div class="container">
         <div class="row">
             <div class="col cards">
-                <div>Selected: {{ selected }}</div>
+                <div>Selected: {{ selected }} for... {{ period }} {{ periodUnit }}</div>
 
                 <select v-model="selected">
                     <option disabled value="">Please select one</option>
@@ -14,17 +14,19 @@
                 <button @click="queryData"> Go!</button>
             </div>
             <div class="col cards">
-                <p class="container">Query Period?:
-                    <input v-model="period" placeholder="edit me" />
-                </p>
-                <div>Query Unit: {{ period }} {{ periodUnit }}</div>
+                <div class="container">Query Period?:
+                    <div>
+                        <input v-model="period" placeholder="edit me" />
+                    </div>
+                    <div>Query Unit?:</div>
 
-                <select v-model="periodUnit">
-                    <option disabled value="">Please select one</option>
-                    <option>Month(s)</option>
-                    <option>Week(s)</option>
-                    <option>Hour(s)</option>
-                </select>
+                    <select v-model="periodUnit">
+                        <option disabled value="">Please select one</option>
+                        <option>Month(s)</option>
+                        <option>Week(s)</option>
+                        <option>Hour(s)</option>
+                    </select>
+                </div>
             </div>
         </div>
     </div>
@@ -63,7 +65,7 @@ export default {
             startDate: String,
             endDate: String,
             period: "",
-            periodUnit: "",
+            periodUnit: "_",
         }
     },
     async created() {

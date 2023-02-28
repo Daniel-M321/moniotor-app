@@ -9,7 +9,7 @@ services:
     depends_on:
       - webapp
   webapp:
-    image:  danmillett/moniotor-front:3.0
+    image:  danmillett/moniotor-front:latest
     depends_on:
       - influxdb
     environment:
@@ -20,7 +20,7 @@ services:
       - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${DOCKER_INFLUXDB_INIT_ADMIN_TOKEN}
     container_name: frontend
   backend:
-    image:  danmillett/moniotor-back:3.0
+    image:  danmillett/moniotor-back:latest
     environment:
       - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${DOCKER_INFLUXDB_INIT_ADMIN_TOKEN}
       - DOCKER_INFLUXDB_INIT_PASSWORD=${DOCKER_INFLUXDB_INIT_PASSWORD}
