@@ -3,7 +3,7 @@
         <div class="col col-lg-1 col-sm-12"><img class="rounded-circle" height="80" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmG5p8UupmMVKs875O7bXQYyptCrL_lhnMC6YoIvjalCiN8mkKiYCtJJxFqP2RS4r7k-A&usqp=CAU" alt="Profile pic"></div>
         <div class="col pt-2 col-lg-6 col-6 col-md-12">
             <h3>Welcome</h3>
-            <p class="text-muted">Please enter a measurement and period for the data (Default period = 30 days)</p>
+            <p class="text-muted">Please enter a measurement and period for the data</p>
         </div>
         <!-- <div class="col float-right col-lg-4 mt-lg-5 mb-lg-3 my-md-2">
             <div class="row">

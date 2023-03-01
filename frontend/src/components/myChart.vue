@@ -1,5 +1,4 @@
 <template>
-    <!-- <TimePeriod :from="startDate" :to="endDate" @period="queryPeriod"/> -->
     <div class="container">
         <div class="row">
             <div class="col cards">
