@@ -1,9 +1,8 @@
 <template>
-    <!-- <TimePeriod :from="startDate" :to="endDate" @period="queryPeriod"/> -->
     <div class="container">
         <div class="row">
             <div class="col cards">
-                <div>Selected: {{ selected }}</div>
+                <div>What measurement would you like to query? </div>
 
                 <select v-model="selected">
                     <option disabled value="">Please select one</option>
@@ -11,15 +10,21 @@
                     <option>Humidity</option>
                     <option>CO</option>
                 </select>
-                <button @click="queryData"> Go!</button>
+                <p>Current Query: {{ selected }} {{ period }} {{ periodUnit }} ago</p>
             </div>
             <div class="col cards">
-                <p class="container">How many days?: {{ days }}
-                    <input v-model="days" placeholder="edit me" />
-                </p>
-                <p class="container">How many months?: {{ months }}
-                    <input v-model="months" placeholder="edit me" />
-                </p>
+                <div class="container">Please enter a value and unit of time for your query (Default = 30 days):
+                    <div>
+                        <input v-model="period" placeholder="edit me" />
+                        <select v-model="periodUnit">
+                            <option disabled value="">Please select one</option>
+                            <option>Month(s)</option>
+                            <option>Week(s)</option>
+                            <option>Hour(s)</option>
+                        </select>
+                        <button @click="queryData"> Go!</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -57,16 +62,18 @@ export default {
             analytics: String,
             startDate: String,
             endDate: String,
-            days: "",
-            months: "",
+            period: "30",
+            periodUnit: "Day(s)",
         }
     },
     async created() {
         const title = "Temperature"
         try {
-            const { data } = await axios.get(process.env['VUE_APP_BACKEND_URL']+'/api', {
+            const { data } = await axios.get('http://moniotor.eu-west-1.elasticbeanstalk.com/api', { //todo fix this
                         params: {
-                            measurement: title
+                            measurement: title,
+                            period: this.period,
+                            p_unit: this.periodUnit
                         }
                     })
             this.sensorData = data.info
@@ -100,12 +107,14 @@ export default {
         }
     },
     methods: {
-        async queryData() { //todo might be moving the query button to TimePeriod
+        async queryData() {
             const title = this.selected
             try {
-                const { data } = await axios.get(process.env['VUE_APP_BACKEND_URL']+'/api', {
+                const { data } = await axios.get('http://moniotor.eu-west-1.elasticbeanstalk.com/api', {
                         params: {
-                            measurement: title
+                            measurement: title,
+                            period: this.period,
+                            p_unit: this.periodUnit
                         }
                     })
                 this.sensorData = data.info

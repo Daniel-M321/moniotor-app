@@ -3,7 +3,7 @@
     "containerDefinitions": [
         {
             "name": "moniotor-nginx-1",
-            "image": "danmillett/moniotor-nginx:1.0",
+            "image": "danmillett/moniotor-nginx:latest",
             "hostname": "moniotor-nginx-1",
             "portMappings": [
                 {
@@ -16,7 +16,7 @@
         },
         {
             "name": "frontend",
-            "image": "danmillett/moniotor-front:3.0",
+            "image": "danmillett/moniotor-front:latest",
             "hostname": "frontend",
             "portMappings": [
                 {
@@ -29,7 +29,7 @@
         },
         {
             "name": "moniotor-backend-1",
-            "image": "danmillett/moniotor-back:3.0",
+            "image": "danmillett/moniotor-back:latest",
             "hostname": "moniotor-backend-1",
             "portMappings": [
                 {
