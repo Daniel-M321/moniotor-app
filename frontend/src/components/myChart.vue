@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row">
             <div class="col cards">
-                <div>What measurement would you like to query? </div>
+                <h5>What measurement would you like to query? </h5>
 
                 <select v-model="selected">
                     <option disabled value="">Please select one</option>
@@ -13,17 +13,18 @@
                 <p>Current Query: {{ selected }} {{ period }} {{ periodUnit }} ago</p>
             </div>
             <div class="col cards">
-                <div class="container">Please enter a value and unit of time for your query (Default = 30 days):
-                    <div>
-                        <input v-model="period" placeholder="edit me" />
-                        <select v-model="periodUnit">
-                            <option disabled value="">Please select one</option>
-                            <option>Month(s)</option>
-                            <option>Week(s)</option>
-                            <option>Hour(s)</option>
-                        </select>
-                        <button @click="queryData"> Go!</button>
-                    </div>
+                <div class="container">
+                    <h5>Enter a value and unit of time for your query</h5>
+                    <p class="text-muted">(Default = 30 days):</p>
+
+                    <input v-model="period" placeholder="edit me" />
+                    <select v-model="periodUnit">
+                        <option disabled value="">Please select one</option>
+                        <option>Month(s)</option>
+                        <option>Week(s)</option>
+                        <option>Hour(s)</option>
+                    </select>
+                    <button @click="queryData(selected)"> Go!</button>
                 </div>
             </div>
         </div>
@@ -67,52 +68,14 @@ export default {
         }
     },
     async created() {
-        const title = "Temperature"
-        try {
-            const { data } = await axios.get('http://moniotor.eu-west-1.elasticbeanstalk.com/api', { //todo fix this
-                        params: {
-                            measurement: title,
-                            period: this.period,
-                            p_unit: this.periodUnit
-                        }
-                    })
-            this.sensorData = data.info
-            this.analytics = data.info.analytics
-
-            const dataTimes = Object.keys(this.sensorData.lineBarData)
-            this.startDate = dataTimes[0]
-            const dataLength = dataTimes.length
-            this.endDate = dataTimes[dataLength-1]
-
-            this.ctx = document.getElementById('myChart-diagram').getContext("2d");
-            var gradientFill = this.ctx.createLinearGradient(0,0,0,520);
-            gradientFill.addColorStop(0, 'green');   
-            //gradientFill.addColorStop(1, 'rgba(255, 255, 255, 0)');
-            this.myChart = new Charts(this.ctx, {
-                type: 'line',
-                data: {
-                    labels: dataTimes,
-                    datasets: [{
-                        label: title,
-                        data: Object.values(this.sensorData.lineBarData),
-                        borderWidth: 1
-                    }]
-                }
-            });
-        
-        } catch (e) {
-            console.error(e)
-            console.log(e)
-            this.selected = e
-        }
+        this.queryData('Temperature')
     },
     methods: {
-        async queryData() {
-            const title = this.selected
-            try {
+        async queryData(measurement) {
+            try { //todo add axios mocker
                 const { data } = await axios.get('http://moniotor.eu-west-1.elasticbeanstalk.com/api', {
                         params: {
-                            measurement: title,
+                            measurement: measurement,
                             period: this.period,
                             p_unit: this.periodUnit
                         }
@@ -123,7 +86,7 @@ export default {
                 const dataTimes = Object.keys(this.sensorData.lineBarData)
                 this.startDate = dataTimes[0]
                 const dataLength = dataTimes.length
-                this.endDate = dataTimes[dataLength-1] // todo put into method
+                this.endDate = dataTimes[dataLength-1]
                 
                 this.myChart.destroy()
                 this.myChart = new Charts(this.ctx, {
@@ -131,7 +94,7 @@ export default {
                     data: {
                         labels: dataTimes,
                         datasets: [{
-                            label: title,
+                            label: measurement,
                             data: Object.values(this.sensorData.lineBarData),
                             borderWidth: 1
                         }]
