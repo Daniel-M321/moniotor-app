@@ -3,3 +3,29 @@ env:
   parameter-store:
     DOCKER_INFLUXDB_INIT_PASSWORD: "DOCKER_INFLUXDB_INIT_PASSWORD"
     DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: "DOCKER_INFLUXDB_INIT_ADMIN_TOKEN"
+
+phases:
+  install:
+    runtime-versions:
+      docker: latest
+  pre_build:
+    commands:
+      - echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
+      - cd ./frontend
+      - npm install
+      - cd ../backend
+      - npm install
+  test:
+    commands:
+      - cd ./backend
+      - npm test
+      - cd ../frontend
+      - npm test
+  build:
+    commands:
+      - docker-compose build --no-cache
+      - docker-compose up --timeout 30
+  post_build:
+    commands:
+      - docker-compose down
+      - docker-compose push
