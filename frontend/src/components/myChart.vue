@@ -40,7 +40,7 @@
             <small class="col previous">{{ endDate }}</small>
         </div>
     </div>
-    <Analytics v-bind:info="analytics"/>
+    <Analytics v-bind:analyticInfo="analytics"/>
 </template>
 
 <script>
@@ -72,7 +72,7 @@ export default {
     },
     methods: {
         async queryData(measurement) {
-            try { //todo add axios mocker
+            try {
                 const { data } = await axios.get('http://moniotor.eu-west-1.elasticbeanstalk.com/api', {
                         params: {
                             measurement: measurement,
@@ -88,7 +88,8 @@ export default {
                 const dataLength = dataTimes.length
                 this.endDate = dataTimes[dataLength-1]
                 
-                this.myChart.destroy()
+                if(this.myChart != null)
+                    this.myChart.destroy()
                 this.myChart = new Charts(this.ctx, {
                     type: 'line',
                     data: {

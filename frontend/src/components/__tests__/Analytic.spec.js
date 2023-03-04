@@ -7,7 +7,7 @@ describe('myHeader.vue Test', () => {
       // render the component
       const wrapper = shallowMount(Analytic, {
         propsData: {
-          info: 'Vue Project'
+          analyticInfo: 'Vue Project'
         }
       })
   
