@@ -10,7 +10,6 @@
   import myChart from "./myChart.vue";
   
   export default {
-    // eslint-disable-next-line vue/multi-word-component-names
     name: 'moniotorMain',
     components:{
       myHeader,
