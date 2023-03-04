@@ -18,9 +18,10 @@ phases:
   test:
     commands:
       - cd ./backend
-      - npm test
+      - npm run test
       - cd ../frontend
-      - npm test
+      - npm run test:unit
+      - npm run test:coverage
   build:
     commands:
       - docker-compose build --no-cache
