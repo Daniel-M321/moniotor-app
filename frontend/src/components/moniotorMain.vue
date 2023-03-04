@@ -1,19 +1,19 @@
 <template>
     <div>
-      <Header />
+      <myHeader />
       <myChart />
     </div>
   </template>
   
   <script>
-  import Header from "./Header.vue";
+  import myHeader from "./myHeader.vue";
   import myChart from "./myChart.vue";
   
   export default {
     // eslint-disable-next-line vue/multi-word-component-names
-    name: 'Main',
+    name: 'moniotorMain',
     components:{
-      Header,
+      myHeader,
       myChart
     }
   }
