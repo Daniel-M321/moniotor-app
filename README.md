@@ -32,5 +32,8 @@ npm run build
 npm run lint
 ```
 
+### If running locally
+Need to change axios.get() url to "http://localhost/api", in ```src\components\myChart.vue``` line 76. Check nginx folder if lost.
+
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
