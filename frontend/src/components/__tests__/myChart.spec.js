@@ -44,16 +44,17 @@ describe('myChart.vue Implementation Test', () => {
     wrapper.unmount()
   })
 
-  it('initializes with correct elements', () => {
+  it('initialises with correct elements', () => {
     // check that the heading text is rendered
     expect(wrapper.findAll('div').length).toEqual(8)
+    // Nothing selected when initialised
     expect(wrapper.findAll('p').at(0).text()).toMatch('Current Query:  30 Day(s) ago')
 
     expect(axios.get).toHaveBeenCalledTimes(1)
   })
 
-  it('processes valid props data', async () => {
-    // Update the props passed in to the WeatherResult component
+  it('Query function works as expected', async () => {
+    // run queryData function
     wrapper.vm.queryData('Temperature')
 
     // Wait until all Promises are resolved and the DOM updates
@@ -61,13 +62,14 @@ describe('myChart.vue Implementation Test', () => {
 
     expect(axios.get).toHaveBeenCalledTimes(2)
   
-    // check that the prop data is stored as expected within the component
+    // check that the prop data is stored as expected after query
     expect(wrapper.vm.startDate).toMatch('18:35')
 
     wrapper.vm.queryData('Temperature')
     // Wait until all Promises are resolved and the DOM updates
     await flushPromises()
 
+    // recheck data
     expect(axios.get).toHaveBeenCalledTimes(3)
     expect(wrapper.vm.endDate).toMatch('18:45')
   })  
