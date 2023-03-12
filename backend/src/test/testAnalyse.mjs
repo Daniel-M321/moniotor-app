@@ -2,7 +2,7 @@ import test from 'unit.js';
 import {analyseBasic, analyseCO} from '../analyse.mjs'
 import {extraAnalysis} from "../assets/analyseText.mjs";
 
-
+// tests for the analytic data that is sent back.
 
 describe('Temperature value analysis test', function(){
     it('normal temps', function(){

@@ -1,8 +1,11 @@
+import {InfluxDB} from '@influxdata/influxdb-client'
+import {url, token, org} from '../env.mjs'
 import {queryTime} from './src/queryDB.mjs'
 
 import {fileURLToPath} from 'node:url'
 import express from 'express'
 
+const queryApi = new InfluxDB({url, token}).getQueryApi(org)
 const app = express();
 const PORT = process.env.PORT || 8081;
 const dirName = fileURLToPath(new URL('./', import.meta.url))
@@ -13,7 +16,7 @@ app.get("/", (request, response) => {
 });
 
 app.get("/queryinflux", (request, response) => {
-    queryTime(request.query).then(data => {
+    queryTime(request.query, queryApi).then(data => {
         if(!data)
             response.status(200).json({ message: "There was no data found with that query"});
         else
