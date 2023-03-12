@@ -8,15 +8,14 @@ phases:
   install:
     runtime-versions:
       docker: latest
-  pre_build:
     commands:
-      - echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
       - cd ./frontend
       - npm install
       - cd ../backend
       - npm install
-  test:
+  pre_build:
     commands:
+      - echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
       - cd ./backend
       - npm run test
       - cd ../frontend
