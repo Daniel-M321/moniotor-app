@@ -12,10 +12,14 @@ async function queryTime(req_params, queryApi) {
   if(req_params.period && req_params.p_unit && req_params.period !== "" && req_params.p_unit !== "") {
     var period = req_params.period
     var unit = req_params.p_unit
-    if(period < 1)
+    if(period < 1) {
       console.log("invalid period entered: defaulted to 30 days")
-    else if(unit == "Month(s)" || unit == "Hour(s)" || unit == "Week(s)" || unit == "Day(s)")
+      period = "-30d"
+    } else if(unit == "Month(s)" || unit == "Hour(s)" || unit == "Week(s)" || unit == "Day(s)") {
       period = "-"+period+unit.charAt(0).toLowerCase()
+      if(unit == "Month(s)")
+        period += "o"
+    }
   }
   else{
     var period = "-30d"
