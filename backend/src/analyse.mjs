@@ -16,7 +16,7 @@ function analyseBasic(data, measurement, threshold, unit, warningPeriod=144){
 
     const dataLength = Object.keys(data).length     //todo checks for data send more than 5 minutes apart, means sensors didnt record, could be large gap
 
-    if(dataLength == 0){
+    if(dataLength == 0){                            //todo check outside temperature and contrast (API?)
         return "There is no data for "+measurement+" in this period..."
     }
 

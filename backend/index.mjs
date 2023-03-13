@@ -1,5 +1,5 @@
 import {InfluxDB} from '@influxdata/influxdb-client'
-import {url, token, org} from '../env.mjs'
+import {url, token, org} from './env.mjs'
 import {queryTime} from './src/queryDB.mjs'
 
 import {fileURLToPath} from 'node:url'
