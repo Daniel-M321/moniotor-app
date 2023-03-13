@@ -88,8 +88,14 @@ export default {
                 const dataLength = dataTimes.length
                 this.endDate = dataTimes[dataLength-1]
                 
-                if(this.myChart != null)
+                if(this.myChart != null) {
                     this.myChart.destroy()
+                }
+                else {
+                    this.ctx = document.getElementById('myChart-diagram').getContext("2d");
+                    var gradientFill = this.ctx.createLinearGradient(0,0,0,520);
+                    gradientFill.addColorStop(0, 'blue');
+                }
                 this.myChart = new Charts(this.ctx, {
                     type: 'line',
                     data: {
