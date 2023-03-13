@@ -5,20 +5,45 @@
             <h3>Welcome</h3>
             <p class="text-muted">Please enter a measurement and period for the data</p>
         </div>
-        <!-- <div class="col float-right col-lg-4 mt-lg-5 mb-lg-3 my-md-2">
-            <div class="row">
+        <div class="col float-right col-lg-4 mt-lg-5 mb-lg-3 my-md-2">
+            <h3>Mobile Number Update</h3>
+            <input v-model="period" placeholder="edit me" />
+            <button @click="writeNumber(selected)"> Update</button>
+
+            <p>{{ writeStatus }}</p>
+            <!-- <div class="row">
                 <small class="col today active">Today</small>
                 <small class="col compared text-muted disabled">compared to</small>
                 <small class="col previous">Previous Period</small>
-            </div>
+            </div> -->
         </div> -->
-        <!-- <hr> -->
     </div>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
-    name:'myHeader'
+    name:'myHeader',
+    data() {
+        return {
+            writeStatus: ""
+        }
+    },
+    methods: {
+        async writeNumber() {
+            const { data } = await axios.put('http://localhost/api', {
+                        params: {
+                        }
+                    })
+
+            if (data == "Success"){
+                this.writeStatus = "Mobile number updated successfully"
+            } else {
+                this.writeStatus = "Error updating number, please contact support."
+            }
+        }
+    }
 }
 </script>
 
