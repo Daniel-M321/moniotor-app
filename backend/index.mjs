@@ -27,8 +27,8 @@ app.get("/queryinflux", (request, response) => {
     })
 });
 
-app.put("/writeinflux", (request, response) => { //todo nginx stuff
-    writeDB(request.query, writeApi).then(data => {
+app.put("/writeinflux", (request, response) => {
+    writeDB(request.query, writeApi, queryApi).then(data => {
         if(!data)
             response.status(404).json({ message: "There was an issue with that write"});
         else

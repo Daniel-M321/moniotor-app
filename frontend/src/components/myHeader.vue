@@ -7,10 +7,11 @@
         </div>
         <div class="col float-right col-lg-4 mt-lg-5 mb-lg-3 my-md-2">
             <h3>Mobile Number Update</h3>
-            <input v-model="period" placeholder="edit me" />
-            <button @click="writeNumber(selected)"> Update</button>
+            <input v-model="pnumber" placeholder="edit me" />
+            <button @click="writeNumber(pnumber)"> Update</button>
 
             <p>{{ writeStatus }}</p>
+
             <!-- <div class="row">
                 <small class="col today active">Today</small>
                 <small class="col compared text-muted disabled">compared to</small>
@@ -27,18 +28,25 @@ export default {
     name:'myHeader',
     data() {
         return {
-            writeStatus: ""
+            writeStatus: "",
+            pnumber: 0
         }
     },
     methods: {
-        async writeNumber() {
-            const { data } = await axios.put('http://localhost/api', {
+        async writeNumber(number) {
+            if (number == 0 || number < 10) {
+                this.writeStatus = "invalid number entered please try again"
+                return null
+            }
+            const { data } = await axios.put('http://moniotor.eu-west-1.elasticbeanstalk.com/pnumber', {
                         params: {
                         }
                     })
 
             if (data == "Success"){
                 this.writeStatus = "Mobile number updated successfully"
+            } else if (data == "Failure"){
+                this.writeStatus = "Error, you have already updated your number in the last hour."
             } else {
                 this.writeStatus = "Error updating number, please contact support."
             }
