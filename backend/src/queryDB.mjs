@@ -1,4 +1,4 @@
-import {flux, fluxDuration} from '@influxdata/influxdb-client'
+import {flux, fluxDuration, Point} from '@influxdata/influxdb-client'
 import {analyseBasic, analyseCO} from './analyse.mjs'
 
 async function queryTime(req_params, queryApi) {
@@ -77,6 +77,26 @@ async function queryTime(req_params, queryApi) {
 
 function dateFormatter(date){
   return date.toLocaleDateString()+","+date.getHours()+":"+date.getMinutes()
+}
+
+async function writeDB(req_params, writeApi) {
+  console.log('*** WRITE DB ***')
+
+  if(!req_params.phone_number){
+    return null
+  }
+
+  const point1 = new Point("Phone")
+  .tag("Location", "User")
+  .floatField("number", req_params.phone_number)
+
+  writeApi.writePoint(point1)
+
+  writeApi.close().then(() => {
+    console.log('WRITE FINISHED')
+  })
+
+  return "Success"
 }
 
 export {queryTime}
