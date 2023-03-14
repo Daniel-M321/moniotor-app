@@ -5,7 +5,7 @@ import {queryTime, writeDB} from './src/queryDB.mjs'
 import {fileURLToPath} from 'node:url'
 import express from 'express'
 
-influx_client = new InfluxDB({url, token})
+const influx_client = new InfluxDB({url, token})
 const queryApi = influx_client.getQueryApi(org)
 const writeApi = influx_client.getWriteApi(org, bucket)
 
