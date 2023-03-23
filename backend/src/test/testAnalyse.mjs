@@ -60,7 +60,7 @@ describe('Humidity value analysis test', function(){
 
         test.assert.equal(
             humAnalysis,
-            "Average Humidity in this selected period: 55%. A minimum value of 50% was found, and a maximum of 60%"
+            "Average Humidity in this selected period: 55%. A minimum value of 50% was found, and a maximum of 60%"+extraAnalysis.recommendedHum
         )
     })
     it('low humidity', function(){
@@ -73,7 +73,7 @@ describe('Humidity value analysis test', function(){
 
         test.assert.equal(
             humAnalysis,
-            "Average Humidity in this selected period: 18%. A minimum value of 15% was found, and a maximum of 21%.\nWARNING: Excessive Humidity below 20% has been detected at the following time(s):\n\t- From 14.53:12-2-2023 To 15.02:12-2-2023"
+            "Average Humidity in this selected period: 18%. A minimum value of 15% was found, and a maximum of 21%.\nWARNING: Excessive Humidity below 20% has been detected at the following time(s):\n\t- From 14.53:12-2-2023 To 15.02:12-2-2023"+extraAnalysis.recommendedHum
         )
     })
     it('low humidity, long period', function(){
@@ -86,7 +86,7 @@ describe('Humidity value analysis test', function(){
 
         test.assert.equal(
             humAnalysis,
-            "Average Humidity in this selected period: 18%. A minimum value of 15% was found, and a maximum of 21%.\nWARNING: Excessive Humidity below 20% has been detected at the following time(s):\n\t- From 14.53:12-2-2023 To 15.02:12-2-2023.\n\nThis excessive Humidity has been detected for over 0.017 hour(s), "+extraAnalysis.lowHumidity
+            "Average Humidity in this selected period: 18%. A minimum value of 15% was found, and a maximum of 21%.\nWARNING: Excessive Humidity below 20% has been detected at the following time(s):\n\t- From 14.53:12-2-2023 To 15.02:12-2-2023.\n\nThis excessive Humidity has been detected for over 0.017 hour(s), "+extraAnalysis.lowHumidity+extraAnalysis.recommendedHum
         )
     })
 })
