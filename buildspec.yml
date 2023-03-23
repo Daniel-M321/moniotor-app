@@ -23,7 +23,7 @@ phases:
     commands:
       - cd ..
       - docker-compose build --no-cache
-      - docker-compose up --timeout 30
+      - docker-compose up -t 10
   post_build:
     commands:
       - docker-compose down
