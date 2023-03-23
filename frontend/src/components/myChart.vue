@@ -9,6 +9,8 @@
                     <option>Temperature</option>
                     <option>Humidity</option>
                     <option>CO</option>
+                    <option>LPG</option>
+                    <option>Smoke</option>
                 </select>
                 <p>Current Query: {{ selected }} {{ period }} {{ periodUnit }} ago</p>
             </div>

@@ -1,5 +1,5 @@
 import {flux, fluxDuration, Point} from '@influxdata/influxdb-client'
-import {analyseBasic, analyseCO} from './analyse.mjs'
+import {analyseBasic, analyseLPG, analyseSmoke, analyseCO} from './analyse.mjs'
 
 async function queryTime(req_params, queryApi) {
   console.log('*** QUERY ROWS ***')
@@ -70,6 +70,10 @@ async function queryTime(req_params, queryApi) {
       analytics = analyseBasic(lineBarData, measurement, [20, 75], "%")
   else if(measurement == "CO")
       analytics = analyseCO(lineBarData)
+  else if(measurement == "LPG")
+      analytics = analyseLPG(lineBarData)
+  else if(measurement == "Smoke")
+      analytics = analyseSmoke(lineBarData)
 
   return ({ scatterData, lineBarData, analytics })
 

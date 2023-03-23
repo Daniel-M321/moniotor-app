@@ -104,6 +104,172 @@ function analyseBasic(data, measurement, threshold, unit, warningPeriod=144){
     average = Math.round(average/dataLength)
     analytics = "Average "+measurement+" in this selected period: "+average+unit+". A minimum value of "+min+unit+" was found, and a maximum of "+max+unit+dataWarning
     
+    if(measurement == "Humidity"){
+        analytics += extraAnalysis.recommendedHum
+    }
+
+    console.log(analytics)
+    return analytics
+}
+
+function analyseLPG(data, warningPeriod=12){
+    var average = 0
+    var max = null
+    var min = null
+    var analytics = ""
+    var LPGWarning = ""
+    var highLPGTime = []
+    var mildWarning = ""
+    var highCounter = 0
+    var highStreak = 0
+
+    const dataLength = Object.keys(data).length
+
+    if(dataLength == 0){
+        return "There is no data for LPG in this period..."
+    }
+
+    for(var i = 0; i < dataLength; i++)
+    {
+        var point = Object.values(data)[i]
+
+        average += point
+
+        if(point > max || max == null) {            // max won't have value at start
+            max = point
+        }
+        if(point > 15) {
+            if(point > 50){                        // life threatening values, user will already be called
+                return "WARNING: LPG levels have exceeded safe limits, Please take immediate actions. A measure of "+point+"ppm of LPG has been measured in your home, this has the potential to be fatal!"
+            }                            
+            if(highCounter == 0){
+                highLPGTime.push(Object.keys(data)[i])  // adding start time
+                highLPGTime.push("end of results.")
+            }
+            if(point > 30){
+                mildWarning = "\nElevated LPG levels have been detected at "+Object.keys(data)[i]
+            }
+            highCounter++                           // counter on how long there has been high data in one sitting
+        }
+        else if(highCounter > 0){                   // if data goes below threshold, reset counter
+            if(highCounter > highStreak){
+                highStreak = highCounter
+            }
+            highLPGTime[highLPGTime.length - 1] = Object.keys(data)[i] // adding end time
+            highCounter = 0
+        }
+
+        if(point < min || min == null) {          
+            min = point 
+        }
+    }
+
+    const earlyPoint = data[Math.round(dataLength*0.1)]   // measuring early and late points to see if values have risen
+    const latePoint = data[Math.round(dataLength*0.9)]
+    const diff = latePoint - earlyPoint
+
+    if(max > 15) {
+        LPGWarning = "ACTION IS NEEDED. WARNING: Excessive LPG levels above 15ppm has been detected at the following time(s):"
+        while(highLPGTime.length > 1){
+            LPGWarning += "\n\t- From "+highLPGTime.shift()+" To "+highLPGTime.shift()
+        }
+        if(highStreak > warningPeriod){ // readings are every five mins, default = 12 five mins are in 1 hour.
+            LPGWarning += "\n\nThese excessive LPG levels has been detected for over "+(warningPeriod/60).toFixed(3)+" hour(s), Action is needed to prevent physical symptons. "
+            LPGWarning += extraAnalysis.dangerousLPG
+        }
+        LPGWarning += mildWarning+"\n"
+    }
+    else if(diff > 10){                         // no need to talk about difference if emergency action is needed.
+        LPGWarning = "Warning: LPG levels have been rising over this period. "+extraAnalysis.risingLPG
+    }
+    else if(diff < -5){
+        analytics += "LPG levels have fallen this period. This is a good outcome.\n"
+    }
+
+    average = Math.round(average/dataLength)
+    analytics += LPGWarning+"Average LPG levels in this selected period: "+average+"ppm. A minimum value of "+min+"ppm was found, and a maximum of "+max+"ppm"
+
+    console.log(analytics)
+    return analytics
+}
+
+function analyseSmoke(data, warningPeriod=12){
+    var average = 0
+    var max = null
+    var min = null
+    var analytics = ""
+    var Warning = ""
+    var highTime = []
+    var mildWarning = ""
+    var highCounter = 0
+    var highStreak = 0
+
+    const dataLength = Object.keys(data).length
+
+    if(dataLength == 0){
+        return "There is no data for Smoke in this period..."
+    }
+
+    for(var i = 0; i < dataLength; i++)
+    {
+        var point = Object.values(data)[i]
+
+        average += point
+
+        if(point > max || max == null) {            // max won't have value at start
+            max = point
+        }
+        if(point > 200) {
+            if(point > 400){                        // life threatening values, user will already be called
+                return "WARNING: Smoke levels have exceeded safe limits, Please take immediate actions. A measure of "+point+"ppm of CO has been measured in your home, this has the potential to be fatal!"
+            }                            
+            if(highCounter == 0){
+                highTime.push(Object.keys(data)[i])  // adding start time
+                highTime.push("end of results.")
+            }
+            if(point > 300){
+                mildWarning = "\nElevated Smoke levels have been detected at "+Object.keys(data)[i]
+            }
+            highCounter++                           // counter on how long there has been high data in one sitting
+        }
+        else if(highCounter > 0){                   // if data goes below threshold, reset counter
+            if(highCounter > highStreak){
+                highStreak = highCounter
+            }
+            highTime[highTime.length - 1] = Object.keys(data)[i] // adding end time
+            highCounter = 0
+        }
+
+        if(point < min || min == null) {          
+            min = point 
+        }
+    }
+
+    const earlyPoint = data[Math.round(dataLength*0.1)]   // measuring early and late points to see if values have risen
+    const latePoint = data[Math.round(dataLength*0.9)]
+    const diff = latePoint - earlyPoint
+
+    if(max > 200) {
+        Warning = "ACTION IS NEEDED. WARNING: Excessive Smoke levels above 200ppm has been detected at the following time(s):"
+        while(highTime.length > 1){
+            Warning += "\n\t- From "+highTime.shift()+" To "+highTime.shift()
+        }
+        if(highStreak > warningPeriod){ // readings are every five mins, default = 12 five mins are in 1 hour.
+            Warning += "\n\nThese excessive Smoke levels has been detected for over "+(warningPeriod/60).toFixed(3)+" hour(s), Action is needed to prevent physical symptons. "
+            Warning += extraAnalysis.dangerousSmoke
+        }
+        Warning += mildWarning+"\n"
+    }
+    else if(diff > 30){                         // no need to talk about difference if emergency action is needed.
+        Warning = "Warning: Smoke levels have been rising over this period. "+extraAnalysis.risingSmoke
+    }
+    else if(diff < -10){
+        analytics += "Smoke levels have fallen this period. This is a good outcome.\n"
+    }
+
+    average = Math.round(average/dataLength)
+    analytics += Warning+"Average Smoke levels in this selected period: "+average+"ppm. A minimum value of "+min+"ppm was found, and a maximum of "+max+"ppm"
+
     console.log(analytics)
     return analytics
 }
@@ -189,4 +355,4 @@ function analyseCO(data, warningPeriod=12){
     return analytics
 }
 
-export {analyseBasic, analyseCO}
+export {analyseBasic, analyseLPG, analyseSmoke, analyseCO}
