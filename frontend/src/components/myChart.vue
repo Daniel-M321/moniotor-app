@@ -22,6 +22,7 @@
                         <option disabled value="">Please select one</option>
                         <option>Month(s)</option>
                         <option>Week(s)</option>
+                        <option>Day(s)</option>
                         <option>Hour(s)</option>
                     </select>
                     <button @click="queryData(selected)"> Go!</button>

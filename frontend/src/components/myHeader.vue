@@ -6,7 +6,7 @@
             <p class="text-muted">Please enter a measurement and period for the data</p>
         </div>
         <div class="col float-right col-lg-4 mt-lg-5 mb-lg-3 my-md-2">
-            <h3>Mobile Number Update</h3>
+            <h5>Mobile Number Update</h5>
             <input v-model="pnumber" placeholder="edit me" />
             <button @click="writeNumber(pnumber)"> Update</button>
 
@@ -17,7 +17,7 @@
                 <small class="col compared text-muted disabled">compared to</small>
                 <small class="col previous">Previous Period</small>
             </div> -->
-        </div> -->
+        </div>
     </div>
 </template>
 
@@ -29,26 +29,30 @@ export default {
     data() {
         return {
             writeStatus: "",
-            pnumber: 0
+            pnumber: ""
         }
     },
     methods: {
         async writeNumber(number) {
-            if (number == 0 || number < 10) {
+            if (number == null || number.length != 10) {
                 this.writeStatus = "invalid number entered please try again"
                 return null
             }
-            const { data } = await axios.put('http://moniotor.eu-west-1.elasticbeanstalk.com/pnumber', {
+            const { data } = await axios.put('http://moniotor.eu-west-1.elasticbeanstalk.com/pnumber', null, {
                         params: {
+                            phone_number: number
                         }
                     })
 
-            if (data == "Success"){
+            console.log(data)
+            if (data.info == "Success"){
                 this.writeStatus = "Mobile number updated successfully"
-            } else if (data == "Failure"){
+            } else if (data.info == "Failure"){
                 this.writeStatus = "Error, you have already updated your number in the last hour."
+                return null
             } else {
                 this.writeStatus = "Error updating number, please contact support."
+                return null
             }
         }
     }
