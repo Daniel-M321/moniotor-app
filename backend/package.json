@@ -8,7 +8,7 @@
     "start": "nodemon index.mjs",
     "errors": "pm2 logs --err index",
     "stop": "pm2 stop index",
-    "test": "mocha src/test/testAnalyse.mjs"
+    "test": "mocha src/test"
   },
   "author": "Daniel Millett",
   "license": "ISC",
@@ -19,6 +19,7 @@
     "influx": "^5.9.3",
     "mocha": "^10.2.0",
     "pm2": "^5.2.2",
+    "sinon": "^7.5.0",
     "typescript": "^4.9.5",
     "unit.js": "^2.1.1"
   },

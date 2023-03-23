@@ -5,7 +5,7 @@
                 <div class="col col-sm-center">
                     <div class="col dataHeader active"> <b>Analytical Data:</b></div>
                 </div>
-                <p> {{ info }} </p>
+                <p> {{ analyticInfo }} </p>
 
                 <!-- <button> {{ sensorData }}</button> -->
             </div>
@@ -18,7 +18,7 @@ export default {
     // eslint-disable-next-line vue/multi-word-component-names
     name:'Analytics',
     props: {
-        info: String,
+        analyticInfo: String,
     }
 }
 </script>

@@ -1,7 +1,12 @@
-import {queryTime} from './src/queryDB.mjs'
+import {InfluxDB} from '@influxdata/influxdb-client'
+import {url, token, org, bucket} from './env.mjs'
+import {queryTime, writeDB} from './src/queryDB.mjs'
 
 import {fileURLToPath} from 'node:url'
 import express from 'express'
+
+const influx_client = new InfluxDB({url, token})
+const queryApi = influx_client.getQueryApi(org)
 
 const app = express();
 const PORT = process.env.PORT || 8081;
@@ -13,9 +18,20 @@ app.get("/", (request, response) => {
 });
 
 app.get("/queryinflux", (request, response) => {
-    queryTime(request.query).then(data => {
+    queryTime(request.query, queryApi).then(data => {
         if(!data)
             response.status(200).json({ message: "There was no data found with that query"});
+        else
+            response.status(200).json({info: data});
+    })
+});
+
+app.put("/writeinflux", (request, response) => {
+    const writeApi = influx_client.getWriteApi(org, bucket)
+
+    writeDB(request.query, writeApi, queryApi).then(data => {
+        if(!data)
+            response.status(404).json({ message: "There was an issue with that write"});
         else
             response.status(200).json({info: data});
     })

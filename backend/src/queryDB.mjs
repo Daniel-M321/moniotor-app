@@ -1,25 +1,29 @@
-import {InfluxDB, flux, fluxDuration} from '@influxdata/influxdb-client'
-import {url, token, org} from '../env.mjs'
-import {analyseBasic, analyseCO} from './analyse.mjs'
+import {flux, fluxDuration, Point} from '@influxdata/influxdb-client'
+import {analyseBasic, analyseLPG, analyseSmoke, analyseCO} from './analyse.mjs'
 
-const queryApi = new InfluxDB({url, token}).getQueryApi(org)
-
-async function queryTime(req_params) {
+async function queryTime(req_params, queryApi) {
   console.log('*** QUERY ROWS ***')
 
   var measurement = "null"
-  var period = "-30d"
 
   if(req_params.measurement)
     measurement = req_params.measurement
 
-  if(req_params.period != "" && req_params.p_unit != "")
+  if(req_params.period && req_params.p_unit && req_params.period !== "" && req_params.p_unit !== "") {
     var period = req_params.period
     var unit = req_params.p_unit
-    if(period == 0)
-      console.log("period of 0 entered: defaulted to 30")
-    else if(unit == "Month(s)" || unit == "Hour(s)" || unit == "Week(s)" || unit == "Day(s)")
+    if(period < 1) {
+      console.log("invalid period entered: defaulted to 30 days")
+      period = "-30d"
+    } else if(unit == "Month(s)" || unit == "Hour(s)" || unit == "Week(s)" || unit == "Day(s)") {
       period = "-"+period+unit.charAt(0).toLowerCase()
+      if(unit == "Month(s)")
+        period += "o"
+    }
+  }
+  else{
+    var period = "-30d"
+  }
 
   const start = fluxDuration(period)
 
@@ -66,6 +70,10 @@ async function queryTime(req_params) {
       analytics = analyseBasic(lineBarData, measurement, [20, 75], "%")
   else if(measurement == "CO")
       analytics = analyseCO(lineBarData)
+  else if(measurement == "LPG")
+      analytics = analyseLPG(lineBarData)
+  else if(measurement == "Smoke")
+      analytics = analyseSmoke(lineBarData)
 
   return ({ scatterData, lineBarData, analytics })
 
@@ -75,4 +83,33 @@ function dateFormatter(date){
   return date.toLocaleDateString()+","+date.getHours()+":"+date.getMinutes()
 }
 
-export {queryTime}
+async function writeDB(req_params, writeApi, queryApi) {
+  console.log('*** WRITE DB ***')
+  var status
+
+  if(!req_params.phone_number){
+    return null
+  }
+
+  const data = await queryTime({"measurement": "Phone", "period": "1", "p_unit": "Hour(s)"}, queryApi)
+  
+  if(Object.keys(data.lineBarData).length === 0) {
+    const point1 = new Point("Phone")
+    .tag("Location", "User")
+    .floatField("number", req_params.phone_number)
+
+    writeApi.writePoint(point1)
+
+    writeApi.close().then(() => {
+      console.log('WRITE FINISHED')
+    })
+    status = "Success"
+  }
+  else {
+    console.log("WRITE FAILED, phone number updated in last hour")
+    status = "Failure"
+  }
+  return status
+}
+
+export {queryTime, writeDB}

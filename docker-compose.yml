@@ -4,12 +4,16 @@ services:
     build:
       context: ./nginx
       dockerfile: Dockerfile
+    image: danmillett/moniotor-nginx:latest
     ports:
       - 80:80
     depends_on:
       - webapp
   webapp:
-    image:  danmillett/moniotor-front:latest
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: danmillett/moniotor-front:latest
     depends_on:
       - influxdb
     environment:
@@ -20,7 +24,10 @@ services:
       - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${DOCKER_INFLUXDB_INIT_ADMIN_TOKEN}
     container_name: frontend
   backend:
-    image:  danmillett/moniotor-back:latest
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: danmillett/moniotor-back:latest
     environment:
       - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${DOCKER_INFLUXDB_INIT_ADMIN_TOKEN}
       - DOCKER_INFLUXDB_INIT_PASSWORD=${DOCKER_INFLUXDB_INIT_PASSWORD}

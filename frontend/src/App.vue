@@ -1,14 +1,14 @@
 <template>
-  <Main />
+  <moniotorMain />
 </template>
 
 <script>
-import Main from './components/Main.vue'
+import moniotorMain from './components/moniotorMain.vue'
 
 export default {
   name: 'App',
   components: {
-    Main
+    moniotorMain
   }
 }
 </script>

@@ -1,6 +1,7 @@
 # Moniotor
 
 ## Project setup
+Run this command inside `frontend` AND `backend` directory
 ```
 npm install
 ```
@@ -16,7 +17,7 @@ Temperature,location=kitchen temperature=26 1675780574
 ```
 Make sure to update timestamps if needed.
 
-**Run next commands in frontend directory.**
+**If just testing frontend Run these commands in frontend directory.**
 ### Compiles and hot-reloads for development
 ```
 npm run serve
@@ -31,6 +32,11 @@ npm run build
 ```
 npm run lint
 ```
+
+**Else just run ```docker compose up``` at root**
+
+## N.B. If running locally
+Need to change axios.get() url to "http://localhost/api", in ```src\components\myChart.vue``` line 76. Check `nginx` folder if lost. And uncomment "local" section in compose file or use compose in `docker_dev`
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
