@@ -81,30 +81,31 @@ function dateFormatter(date){
 
 async function writeDB(req_params, writeApi, queryApi) {
   console.log('*** WRITE DB ***')
+  var status
 
   if(!req_params.phone_number){
     return null
   }
 
-  queryTime({"measurement": "Phone", "period": "1", "p_unit": "Hour(s)"}, queryApi).then(data => { // todo needs testing
-    if(data.lineBarData.length == 0) {
-      const point1 = new Point("Phone")
-      .tag("Location", "User")
-      .floatField("number", req_params.phone_number)
+  const data = await queryTime({"measurement": "Phone", "period": "1", "p_unit": "Hour(s)"}, queryApi)
+  
+  if(Object.keys(data.lineBarData).length === 0) {
+    const point1 = new Point("Phone")
+    .tag("Location", "User")
+    .floatField("number", req_params.phone_number)
 
-      writeApi.writePoint(point1)
+    writeApi.writePoint(point1)
 
-      writeApi.close().then(() => {
-        console.log('WRITE FINISHED')
-      })
-    }
-    else {
-      console.log("WRITE FAILED, phone number updated in last hour")
-      return "Failure"
-    }
-  })
-
-  return "Success"
+    writeApi.close().then(() => {
+      console.log('WRITE FINISHED')
+    })
+    status = "Success"
+  }
+  else {
+    console.log("WRITE FAILED, phone number updated in last hour")
+    status = "Failure"
+  }
+  return status
 }
 
 export {queryTime, writeDB}

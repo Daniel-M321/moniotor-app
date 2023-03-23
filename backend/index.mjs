@@ -7,7 +7,6 @@ import express from 'express'
 
 const influx_client = new InfluxDB({url, token})
 const queryApi = influx_client.getQueryApi(org)
-const writeApi = influx_client.getWriteApi(org, bucket)
 
 const app = express();
 const PORT = process.env.PORT || 8081;
@@ -28,6 +27,8 @@ app.get("/queryinflux", (request, response) => {
 });
 
 app.put("/writeinflux", (request, response) => {
+    const writeApi = influx_client.getWriteApi(org, bucket)
+
     writeDB(request.query, writeApi, queryApi).then(data => {
         if(!data)
             response.status(404).json({ message: "There was an issue with that write"});
