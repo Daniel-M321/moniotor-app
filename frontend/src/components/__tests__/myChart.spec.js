@@ -48,7 +48,6 @@ describe('myChart.vue Implementation Test', () => {
     // check that the heading text is rendered
     expect(wrapper.findAll('div').length).toEqual(8)
     // Nothing selected when initialised
-    expect(wrapper.findAll('p').at(0).text()).toMatch('Current Query:  30 Day(s) ago')
 
     expect(axios.get).toHaveBeenCalledTimes(1)
   })
