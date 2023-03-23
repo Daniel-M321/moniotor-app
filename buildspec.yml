@@ -14,13 +14,14 @@ phases:
   pre_build:
     commands:
       - echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
-      - cd ./backend
+      # - cd ./backend
       - npm run test
       - cd ../frontend
       - npm run test:unit
       - npm run test:coverage
   build:
     commands:
+      - cd ..
       - docker-compose build --no-cache
       - docker-compose up --timeout 30
   post_build:
