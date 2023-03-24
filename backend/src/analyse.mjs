@@ -14,7 +14,7 @@ function analyseBasic(data, measurement, threshold, unit, warningPeriod=144){
     var highStreak = 0
     var lowStreak = 0
 
-    const dataLength = Object.keys(data).length     //todo checks for data send more than 5 minutes apart, means sensors didnt record, could be large gap
+    const dataLength = Object.keys(data).length
 
     if(dataLength == 0){                            //todo check outside temperature and contrast (API?)
         return "There is no data for "+measurement+" in this period..."
@@ -29,7 +29,7 @@ function analyseBasic(data, measurement, threshold, unit, warningPeriod=144){
         if(point > max || max == null) {            // max won't have value at start
             max = point
         }
-        if(point > threshold[1]) {                  // online answer of high humidity in UK
+        if(point > threshold[1]) {
             if(highCounter == 0){
                 highDataTime.push(Object.keys(data)[i])  // adding start time
                 highDataTime.push("end of results")
@@ -69,6 +69,9 @@ function analyseBasic(data, measurement, threshold, unit, warningPeriod=144){
         while(highDataTime.length > 1){
             dataWarning += "\n\t- From "+highDataTime.shift()+" To "+highDataTime.shift()
         }
+        if(highDataTime.length != 0){
+            dataWarning += "\nWARNING: There still seems to be high readings that have not fallen since "+highDataTime.shift()
+        }
         if(highStreak > warningPeriod){ // readings are every five mins, default = 144 five mins are in 12 hours.
             dataWarning += ".\n\nThis excessive "+measurement+" has been detected for over "+hours+" hour(s), "
             if(measurement == "Humidity"){
@@ -77,15 +80,15 @@ function analyseBasic(data, measurement, threshold, unit, warningPeriod=144){
             if(measurement == "Temperature"){
                 dataWarning += extraAnalysis.highTemperature
             }
-            if(measurement == "Gas"){
-                dataWarning += extraAnalysis.highHumidity
-            }
         }
     }
     if(min < threshold[0]) {
         dataWarning = ".\nWARNING: Excessive "+measurement+" below "+threshold[0]+unit+" has been detected at the following time(s):"
         while(lowDataTime.length > 1){
             dataWarning += "\n\t- From "+lowDataTime.shift()+" To "+lowDataTime.shift()
+        }
+        if(lowDataTime.length != 0){
+            dataWarning += "\nWARNING: There still seems to be low readings that have not risen since "+highDataTime.shift()
         }
         if(lowStreak > warningPeriod){ // readings are every five mins, 144 five mins are in 12 hours.
             dataWarning += ".\n\nThis excessive "+measurement+" has been detected for over "+hours+" hour(s), "
@@ -94,9 +97,6 @@ function analyseBasic(data, measurement, threshold, unit, warningPeriod=144){
             }
             if(measurement == "Temperature"){
                 dataWarning += extraAnalysis.lowTemperature
-            }
-            if(measurement == "Gas"){
-                dataWarning += extraAnalysis.lowHumidity
             }
         }
     }
