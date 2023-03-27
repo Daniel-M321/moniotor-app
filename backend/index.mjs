@@ -8,6 +8,8 @@ import express from 'express'
 const influx_client = new InfluxDB({url, token})
 const queryApi = influx_client.getQueryApi(org)
 
+var secret = token+"?apiKey="
+
 const app = express();
 const PORT = process.env.PORT || 8081;
 const dirName = fileURLToPath(new URL('./', import.meta.url))
@@ -18,6 +20,10 @@ app.get("/", (request, response) => {
 });
 
 app.get("/queryinflux", (request, response) => {
+    if (request.query.apiKey !== secret) {
+        return response.status(401).send('Unauthorized');
+    }
+
     queryTime(request.query, queryApi).then(data => {
         if(!data)
             response.status(200).json({ message: "There was no data found with that query"});
@@ -27,6 +33,10 @@ app.get("/queryinflux", (request, response) => {
 });
 
 app.put("/writeinflux", (request, response) => {
+    if (request.query.apiKey !== secret) {
+        return response.status(401).send('Unauthorized');
+    }
+
     const writeApi = influx_client.getWriteApi(org, bucket)
 
     writeDB(request.query, writeApi, queryApi).then(data => {

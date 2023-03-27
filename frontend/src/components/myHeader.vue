@@ -40,6 +40,7 @@ export default {
             }
             const { data } = await axios.put('http://moniotor.eu-west-1.elasticbeanstalk.com/pnumber', null, {
                         params: {
+                            apiKey: "",
                             phone_number: number
                         }
                     })

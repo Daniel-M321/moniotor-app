@@ -78,9 +78,10 @@ export default {
             try {
                 const { data } = await axios.get('http://moniotor.eu-west-1.elasticbeanstalk.com/api', {
                         params: {
+                            apiKey: "",
                             measurement: measurement,
                             period: this.period,
-                            p_unit: this.periodUnit
+                            p_unit: this.periodUnit,
                         }
                     })
                 this.sensorData = data.info
