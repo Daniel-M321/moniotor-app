@@ -1,53 +1,80 @@
 <template>
-    <div class="container">
-        <div class="row">
+    <div class="row">
+        <div class="col-md-8">
             <div class="col cards">
-                <h5>What measurement would you like to query? </h5>
+                <div class="container my-5">
 
-                <select v-model="selected">
-                    <option disabled value="">Please select one</option>
-                    <option>Temperature</option>
-                    <option>Humidity</option>
-                    <option>CO</option>
-                    <option>LPG</option>
-                    <option>Smoke</option>
-                </select>
-                <p>Current Query: {{ selected }} {{ period }} {{ periodUnit }} ago</p>
-            </div>
-            <div class="col cards">
-                <div class="container">
-                    <h5>Enter a value and unit of time for your query</h5>
-                    <p class="text-muted">(Default = 30 days):</p>
+                    <canvas height="150" id="myChart-diagram"></canvas>
 
-                    <input v-model="period" placeholder="edit me" />
-                    <select v-model="periodUnit">
-                        <option disabled value="">Please select one</option>
-                        <option>Month(s)</option>
-                        <option>Week(s)</option>
-                        <option>Day(s)</option>
-                        <option>Hour(s)</option>
-                    </select>
-                    <button @click="queryData(selected)"> Go!</button>
+                    <hr>
+                    <div class="row">
+                        <small class="col today active">{{ startDate }}</small>
+                        <small class="col compared text-muted disabled"> TO </small>
+                        <small class="col previous">{{ endDate }}</small>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+        <div class="col-md-4">
+            <div class="col cards">
+                <table class="table">
+                    <thead></thead> 
+                    <tbody>
+                        <tr>
+                            <td style="text-align:center;">
+                                <h5>Measurement:</h5>
 
-    <div class="container my-5">
-        <canvas height="100" id="myChart-diagram"></canvas>
-    </div>
-    <div class="container my-5">
-        <div class="row">
-            <small class="col today active">{{ startDate }}</small>
-            <small class="col compared text-muted disabled"> TO </small>
-            <small class="col previous">{{ endDate }}</small>
+                                <select v-model="selected">
+                                    <option disabled value="">Please select one</option>
+                                    <option>Temperature</option>
+                                    <option>Humidity</option>
+                                    <option>CO</option>
+                                    <option>LPG</option>
+                                    <option>Smoke</option>
+                                </select>
+                                </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center;">
+                                <h5>Period:</h5>
+                        <!-- <p class="text-muted">(Default = 30 days):</p> -->
+
+                                <input v-model="period" placeholder="edit me" />
+                                <select v-model="periodUnit">
+                                    <option disabled value="">Please select one</option>
+                                    <option>Month(s)</option>
+                                    <option>Week(s)</option>
+                                    <option>Day(s)</option>
+                                    <option>Hour(s)</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <p>Current Query: {{ selected }} {{ period }} {{ periodUnit }} ago</p>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center;">
+                                <button class="button" @click="buildMainChart(selected, null)"> Search!</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-    <Analytics v-bind:analyticInfo="analytics"/>
+    <div class="row">
+        <div class="col-md-8">
+            <Analytics v-bind:analyticInfo="analytics"/>
+        </div>
+        <div class="col-md-4">
+            <dataAverages v-bind:data="averages"/>
+        </div>
+    </div>
 </template>
 
 <script>
 import Analytics from './Analytic.vue';
+import dataAverages from './dataAverages.vue';
 import Charts from 'chart.js/auto';
 import axios from 'axios';
 import 'chartjs-adapter-moment';
@@ -55,11 +82,13 @@ import 'chartjs-adapter-moment';
 export default {
     name:'myChart',
     components:{
-        Analytics
+        Analytics,
+        dataAverages
     },
     data() {
         return {
-            myChart: null,
+            mainChart: null,
+            myChartScatter: null,
             sensorData: null,
             selected: "",
             ctx: null,
@@ -67,14 +96,26 @@ export default {
             startDate: String,
             endDate: String,
             period: "30",
-            periodUnit: "Day(s)",
+            periodUnit: "Month(s)",
+            averages: [],
         }
     },
     async created() {
-        this.queryData('Temperature')
+        var response = await this.queryRoute('Temperature')
+        this.averages.push(response.info.analytics[3])
+        this.buildMainChart('Temperature', response)
+        response = await this.queryRoute('Humidity')
+        this.averages.push(response.info.analytics[3])
+        //this.buildChart('Humidity', response, 'myChart-scatter', this.myChartScatter)
+        response = await this.queryRoute('CO')
+        this.averages.push(response.info.analytics[3])
+        response = await this.queryRoute('LPG')
+        this.averages.push(response.info.analytics[3])
+        response = await this.queryRoute('Smoke')
+        this.averages.push(response.info.analytics[3])
     },
     methods: {
-        async queryData(measurement) {
+        async queryRoute(measurement) {
             try {
                 const { data } = await axios.get('http://moniotor.eu-west-1.elasticbeanstalk.com/api', {
                         params: {
@@ -84,8 +125,21 @@ export default {
                             p_unit: this.periodUnit,
                         }
                     })
-                this.sensorData = data.info
-                this.analytics = data.info.analytics
+                return data
+
+            } catch (e) {
+                console.error(e)
+                console.log(e)
+            }
+        },
+        async buildMainChart(measurement, resData) {
+            try {
+                if(resData === null){
+                    resData = await this.queryRoute(measurement)
+                }
+
+                this.sensorData = resData.info
+                this.analytics = resData.info.analytics[0]
 
                 const dataTimes = Object.keys(this.sensorData.lineBarData)
                 this.startDate = dataTimes[0]
@@ -107,8 +161,19 @@ export default {
                         datasets: [{
                             label: measurement,
                             data: Object.values(this.sensorData.lineBarData),
-                            borderWidth: 1
+                            //borderColor: "#36495d",         //legend box colour
+                            borderWidth: 1,     // legend box width
                         }]
+                    },
+                    options: {
+                        responsive: true,
+                        lineTension: 1,
+                        scales: {
+                            y: {
+                                display: true,
+                                text: "mytext"
+                            }
+                        }
                     }
                 });
             } catch (e) {
@@ -140,5 +205,23 @@ export default {
 }
 .compared{
     border: none;
+}
+
+.vertical-center {
+  margin: 0;
+  position: absolute;
+  left: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.button {
+    border-radius: 40%;
+    padding: 2px 32px;
+    background-color: #4489b7;
+    color: white;
+}
+.button:hover {
+    box-shadow: 2px 2px 5px #4489b7;
 }
 </style>

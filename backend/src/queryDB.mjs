@@ -72,8 +72,9 @@ async function queryTime(req_params, queryApi) {
       analytics = analyseCO(lineBarData)
   else if(measurement == "LPG")
       analytics = analyseLPG(lineBarData)
-  else if(measurement == "Smoke")
+  else if(measurement == "Smoke"){
       analytics = analyseSmoke(lineBarData)
+  }
 
   return ({ scatterData, lineBarData, analytics })
 

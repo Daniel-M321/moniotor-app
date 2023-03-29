@@ -17,7 +17,7 @@ function analyseBasic(data, measurement, threshold, unit, warningPeriod=144){
     const dataLength = Object.keys(data).length
 
     if(dataLength == 0){                            //todo check outside temperature and contrast (API?)
-        return "There is no data for "+measurement+" in this period..."
+        return ["There is no data for "+measurement+" in this period...", 0, 0, 0]
     }
 
     for(var i = 0; i < dataLength; i++)
@@ -109,7 +109,7 @@ function analyseBasic(data, measurement, threshold, unit, warningPeriod=144){
     }
 
     console.log(analytics)
-    return analytics
+    return [analytics, max, min, average]
 }
 
 function analyseLPG(data, warningPeriod=12){
@@ -122,11 +122,12 @@ function analyseLPG(data, warningPeriod=12){
     var mildWarning = ""
     var highCounter = 0
     var highStreak = 0
+    var direWarning = ""
 
     const dataLength = Object.keys(data).length
 
     if(dataLength == 0){
-        return "There is no data for LPG in this period..."
+        return ["There is no data for LPG in this period...", 0, 0, 0]
     }
 
     for(var i = 0; i < dataLength; i++)
@@ -140,7 +141,7 @@ function analyseLPG(data, warningPeriod=12){
         }
         if(point > 15) {
             if(point > 50){                        // life threatening values, user will already be called
-                return "WARNING: LPG levels have exceeded safe limits, Please take immediate actions. A measure of "+point+"ppm of LPG has been measured in your home, this has the potential to be fatal!"
+                direWarning = "WARNING: LPG levels have exceeded safe limits, Please take immediate actions. A measure of "+point+"ppm of LPG has been measured in your home, this has the potential to be fatal!"
             }                            
             if(highCounter == 0){
                 highLPGTime.push(Object.keys(data)[i])  // adding start time
@@ -189,8 +190,12 @@ function analyseLPG(data, warningPeriod=12){
     average = Math.round(average/dataLength)
     analytics += LPGWarning+"Average LPG levels in this selected period: "+average+"ppm. A minimum value of "+min+"ppm was found, and a maximum of "+max+"ppm"
 
+    if(direWarning != ""){
+        analytics = direWarning
+    }
+
     console.log(analytics)
-    return analytics
+    return [analytics, max, min, average]
 }
 
 function analyseSmoke(data, warningPeriod=12){
@@ -203,11 +208,12 @@ function analyseSmoke(data, warningPeriod=12){
     var mildWarning = ""
     var highCounter = 0
     var highStreak = 0
+    var direWarning = ""
 
     const dataLength = Object.keys(data).length
 
     if(dataLength == 0){
-        return "There is no data for Smoke in this period..."
+        return ["There is no data for Smoke in this period...", 0, 0, 0]
     }
 
     for(var i = 0; i < dataLength; i++)
@@ -221,7 +227,7 @@ function analyseSmoke(data, warningPeriod=12){
         }
         if(point > 200) {
             if(point > 400){                        // life threatening values, user will already be called
-                return "WARNING: Smoke levels have exceeded safe limits, Please take immediate actions. A measure of "+point+"ppm of CO has been measured in your home, this has the potential to be fatal!"
+                direWarning = "WARNING: Smoke levels have exceeded safe limits, Please take immediate actions. A measure of "+point+"ppm of smoke has been measured in your home, this has the potential to be fatal!"
             }                            
             if(highCounter == 0){
                 highTime.push(Object.keys(data)[i])  // adding start time
@@ -270,8 +276,12 @@ function analyseSmoke(data, warningPeriod=12){
     average = Math.round(average/dataLength)
     analytics += Warning+"Average Smoke levels in this selected period: "+average+"ppm. A minimum value of "+min+"ppm was found, and a maximum of "+max+"ppm"
 
+    if(direWarning != ""){
+        analytics = direWarning
+    }
+
     console.log(analytics)
-    return analytics
+    return [analytics, max, min, average]
 }
 
 function analyseCO(data, warningPeriod=12){
@@ -284,11 +294,12 @@ function analyseCO(data, warningPeriod=12){
     var mildWarning = ""
     var highCounter = 0
     var highStreak = 0
+    var direWarning = ""
 
     const dataLength = Object.keys(data).length
 
     if(dataLength == 0){
-        return "There is no data for CO in this period..."
+        return ["There is no data for CO in this period...", 0, 0 ,0]
     }
 
     for(var i = 0; i < dataLength; i++)
@@ -302,7 +313,7 @@ function analyseCO(data, warningPeriod=12){
         }
         if(point > 25) {
             if(point > 100){                        // life threatening values, user will already be called
-                return "WARNING: CO levels have exceeded safe limits, Please take immediate actions. A measure of "+point+"ppm of CO has been measured in your home, this has the potential to be fatal!"
+                direWarning = "WARNING: CO levels have exceeded safe limits, Please take immediate actions. A measure of "+point+"ppm of CO has been measured in your home, this has the potential to be fatal!"
             }                            
             if(highCounter == 0){
                 highCOTime.push(Object.keys(data)[i])  // adding start time
@@ -351,8 +362,12 @@ function analyseCO(data, warningPeriod=12){
     average = Math.round(average/dataLength)
     analytics += COWarning+"Average CO levels in this selected period: "+average+"ppm. A minimum value of "+min+"ppm was found, and a maximum of "+max+"ppm"
 
+    if(direWarning != ""){
+        analytics = direWarning
+    }
+
     console.log(analytics)
-    return analytics
+    return [analytics, max, min, average]
 }
 
 export {analyseBasic, analyseLPG, analyseSmoke, analyseCO}
