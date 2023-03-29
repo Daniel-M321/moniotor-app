@@ -35,7 +35,7 @@ export default {
                 this.writeStatus = "invalid number entered please try again"
                 return null
             }
-            const { data } = await axios.put('http://localhost/pnumber', null, {
+            const { data } = await axios.put('http://moniotor.eu-west-1.elasticbeanstalk.com/pnumber', null, {
                         params: {
                             apiKey: "",
                             phone_number: number

@@ -121,7 +121,7 @@ export default {
     methods: {
         async queryRoute(measurement) {
             try {
-                const { data } = await axios.get('http://localhost/api', {
+                const { data } = await axios.get('http://moniotor.eu-west-1.elasticbeanstalk.com/api', {
                         params: {
                             apiKey: "",
                             measurement: measurement,

@@ -1,69 +1,21 @@
-# version: '3'
-# services:
-#   nginx:
-#     build:
-#       context: ./nginx
-#       dockerfile: Dockerfile
-#     image: danmillett/moniotor-nginx:latest
-#     ports:
-#       - 80:80
-#     depends_on:
-#       - webapp
-#     envrionment:
-#       - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${DOCKER_INFLUXDB_INIT_ADMIN_TOKEN}
-#   webapp:
-#     build:
-#       context: ./frontend
-#       dockerfile: Dockerfile
-#     image: danmillett/moniotor-front:latest
-#     depends_on:
-#       - influxdb
-#     environment:
-#       - INFLUXDB_HOST=influxdb
-#       - INFLUXDB_PORT=8086
-#       - INFLUXDB_DATABASE=db0
-#     container_name: frontend
-#   backend:
-#     build:
-#       context: ./backend
-#       dockerfile: Dockerfile
-#     image: danmillett/moniotor-back:latest
-#     environment:
-#       - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${DOCKER_INFLUXDB_INIT_ADMIN_TOKEN}
-#       - DOCKER_INFLUXDB_INIT_PASSWORD=${DOCKER_INFLUXDB_INIT_PASSWORD}
-#     container_name: moniotor-backend-1
-#   influxdb:
-#     image: influxdb:latest
-#     ports:
-#       - 8086:8086
-#     environment:
-#       - INFLUXDB_DB=db0
-#       - DOCKER_INFLUXDB_INIT_MODE=setup
-#       - INFLUXDB_HTTP_AUTH_ENABLED=true
-#       - DOCKER_INFLUXDB_INIT_USERNAME=admin
-#       - DOCKER_INFLUXDB_INIT_PASSWORD=${DOCKER_INFLUXDB_INIT_PASSWORD}
-#       - DOCKER_INFLUXDB_INIT_BUCKET=sensors
-#       - DOCKER_INFLUXDB_INIT_ORG=nuig
-#       - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${DOCKER_INFLUXDB_INIT_ADMIN_TOKEN}
-#     container_name: moniotor-influxdb-1
-
-## local 
 version: '3'
 services:
   nginx:
     build:
       context: ./nginx
       dockerfile: Dockerfile
+    image: danmillett/moniotor-nginx:latest
     ports:
       - 80:80
     depends_on:
       - webapp
-    env_file:
-      - ./settings.env
+    envrionment:
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${DOCKER_INFLUXDB_INIT_ADMIN_TOKEN}
   webapp:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+    image: danmillett/moniotor-front:latest
     depends_on:
       - influxdb
     environment:
@@ -71,15 +23,15 @@ services:
       - INFLUXDB_PORT=8086
       - INFLUXDB_DATABASE=db0
     container_name: frontend
-    env_file:
-      - ./settings.env
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    image: danmillett/moniotor-back:latest
+    environment:
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${DOCKER_INFLUXDB_INIT_ADMIN_TOKEN}
+      - DOCKER_INFLUXDB_INIT_PASSWORD=${DOCKER_INFLUXDB_INIT_PASSWORD}
     container_name: moniotor-backend-1
-    env_file:
-      - ./settings.env
   influxdb:
     image: influxdb:latest
     ports:
@@ -89,8 +41,56 @@ services:
       - DOCKER_INFLUXDB_INIT_MODE=setup
       - INFLUXDB_HTTP_AUTH_ENABLED=true
       - DOCKER_INFLUXDB_INIT_USERNAME=admin
+      - DOCKER_INFLUXDB_INIT_PASSWORD=${DOCKER_INFLUXDB_INIT_PASSWORD}
       - DOCKER_INFLUXDB_INIT_BUCKET=sensors
       - DOCKER_INFLUXDB_INIT_ORG=nuig
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${DOCKER_INFLUXDB_INIT_ADMIN_TOKEN}
     container_name: moniotor-influxdb-1
-    env_file:
-      - ./settings.env
+
+## local 
+# version: '3'
+# services:
+#   nginx:
+#     build:
+#       context: ./nginx
+#       dockerfile: Dockerfile
+#     ports:
+#       - 80:80
+#     depends_on:
+#       - webapp
+#     env_file:
+#       - ./settings.env
+#   webapp:
+#     build:
+#       context: ./frontend
+#       dockerfile: Dockerfile
+#     depends_on:
+#       - influxdb
+#     environment:
+#       - INFLUXDB_HOST=influxdb
+#       - INFLUXDB_PORT=8086
+#       - INFLUXDB_DATABASE=db0
+#     container_name: frontend
+#     env_file:
+#       - ./settings.env
+#   backend:
+#     build:
+#       context: ./backend
+#       dockerfile: Dockerfile
+#     container_name: moniotor-backend-1
+#     env_file:
+#       - ./settings.env
+#   influxdb:
+#     image: influxdb:latest
+#     ports:
+#       - 8086:8086
+#     environment:
+#       - INFLUXDB_DB=db0
+#       - DOCKER_INFLUXDB_INIT_MODE=setup
+#       - INFLUXDB_HTTP_AUTH_ENABLED=true
+#       - DOCKER_INFLUXDB_INIT_USERNAME=admin
+#       - DOCKER_INFLUXDB_INIT_BUCKET=sensors
+#       - DOCKER_INFLUXDB_INIT_ORG=nuig
+#     container_name: moniotor-influxdb-1
+#     env_file:
+#       - ./settings.env
