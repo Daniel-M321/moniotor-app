@@ -1,7 +1,8 @@
 <template>
     <div class="col cards">
+        <div class="col dataHeader active"> <b>Reading Averages</b></div>
+
         <table class="table">
-            <th style="text-align:center"><b>Reading Averages</b></th> 
             <tbody>
                 <tr>
                     <td>

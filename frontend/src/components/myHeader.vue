@@ -35,7 +35,7 @@ export default {
                 this.writeStatus = "invalid number entered please try again"
                 return null
             }
-            const { data } = await axios.put('http://moniotor.eu-west-1.elasticbeanstalk.com/pnumber', null, {
+            const { data } = await axios.put('http://localhost/pnumber', null, {
                         params: {
                             apiKey: "",
                             phone_number: number
@@ -70,7 +70,7 @@ export default {
 
 .my-header { 
     border-bottom: 3px solid #010a10;
-    background-color: #a5aa65; 
+    background-color: #97b744; 
     padding: 10px; 
     color: black; 
 }

@@ -2,6 +2,8 @@
     <div class="row">
         <div class="col-md-8">
             <div class="col cards">
+                <div class="col dataHeader active"> <b>Main Graph</b></div>
+
                 <div class="container my-5">
 
                     <canvas height="150" id="myChart-diagram"></canvas>
@@ -17,6 +19,8 @@
         </div>
         <div class="col-md-4">
             <div class="col cards">
+                <div class="col dataHeader active"> <b>Query</b></div>
+
                 <table class="table">
                     <thead></thead> 
                     <tbody>
@@ -117,7 +121,7 @@ export default {
     methods: {
         async queryRoute(measurement) {
             try {
-                const { data } = await axios.get('http://moniotor.eu-west-1.elasticbeanstalk.com/api', {
+                const { data } = await axios.get('http://localhost/api', {
                         params: {
                             apiKey: "",
                             measurement: measurement,
@@ -167,7 +171,7 @@ export default {
                     },
                     options: {
                         responsive: true,
-                        lineTension: 1,
+                        lineTension: 5,
                         scales: {
                             y: {
                                 display: true,
@@ -193,6 +197,7 @@ export default {
     margin: 20px;
     border-radius: 15px;
     padding: 12px;
+    background-color: #f8fbfd;
 }
 .cards:nth-child(4){
     border: none; 
@@ -202,9 +207,11 @@ export default {
     border-radius: 15px;
     text-align: center;
     padding: 5px;
+    background-color: #ffffff;
 }
 .compared{
     border: none;
+    background-color: #f8fbfd;
 }
 
 .vertical-center {
@@ -218,10 +225,16 @@ export default {
 .button {
     border-radius: 40%;
     padding: 2px 32px;
-    background-color: #4489b7;
-    color: white;
+    background-color: #97b744;
+    color: black;
 }
 .button:hover {
     box-shadow: 2px 2px 5px #4489b7;
+}
+.dataHeader{
+    border: 1px solid #9b9b9b9f;
+    border-radius: 30px;
+    text-align: center;
+    padding: 5px;
 }
 </style>

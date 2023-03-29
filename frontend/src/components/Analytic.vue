@@ -3,7 +3,7 @@
         <div class="col col-md-center">
             <div class="col card">
                 <div class="col col-sm-center">
-                    <div class="col dataHeader active"> <b>Analytical Data:</b></div>
+                    <div class="col dataHeader active"> <b>Analytical Data</b></div>
                 </div>
                 <p> {{ analyticInfo }} </p>
 
@@ -30,6 +30,7 @@ export default {
     margin: 20px;
     border-radius: 15px;
     padding: 12px;
+    background-color: #f8fbfd;
 }
 .dataHeader{
     border: 1px solid #9b9b9b9f;
