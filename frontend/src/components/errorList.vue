@@ -1,23 +1,24 @@
 <template>
-    <div class="col col-md-center">
-        <div class="col card">
-            <div class="col col-sm-center">
-                <div class="col dataHeader active"> <b>Analytical Data</b></div>
-            </div>
-            <div class="container my-5">
-                <p> {{ analyticInfo }} </p>
-            </div>
-            
+    <div class="col cards">
+        <div class="col dataHeader active"> <b>Error Log</b></div>
+        <div class="container my-5">
+
+        <table class="table">
+            <tbody>
+                <tr v-for="(item, index) in items" :key="index">
+                    <td>{{ errors }}</td>
+                </tr>
+            </tbody>
+        </table>
         </div>
     </div>
 </template>
 
 <script>
 export default {
-    // eslint-disable-next-line vue/multi-word-component-names
-    name:'Analytics',
+    name:'errorList',
     props: {
-        analyticInfo: String,
+        errorsArr: [],
     }
 }
 </script>
@@ -29,7 +30,6 @@ export default {
     margin: 20px;
     border-radius: 15px;
     padding: 12px;
-    background-color: #f8fbfd;
 }
 .dataHeader{
     border: 1px solid #9b9b9b9f;

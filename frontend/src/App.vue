@@ -1,5 +1,5 @@
 <template>
-  <moniotorMain />
+  <moniotorMain class="body"/>
 </template>
 
 <script>
@@ -12,3 +12,11 @@ export default {
   }
 }
 </script>
+
+<style>
+
+.body{
+  background-color: #3d3d3d;
+}
+
+</style>

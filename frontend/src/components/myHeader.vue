@@ -58,19 +58,10 @@ export default {
 </script>
 
 <style scoped>
-.today, .previous, .compared{
-    border: 1px solid #9b9b9b9f;
-    border-radius: 15px;
-    text-align: center;
-    padding: 5px;
-}
-.compared{
-    border: none;
-}
 
 .my-header { 
-    border-bottom: 3px solid #010a10;
-    background-color: #97b744; 
+    border-bottom: 5px solid #2996d1;
+    background-color: #f8fbfd; 
     padding: 10px; 
     color: black; 
 }
