@@ -2,17 +2,17 @@ version: '3'
 services:
   nginx:
     build:
-      context: ./nginx
+      context: ../nginx
       dockerfile: Dockerfile
     ports:
       - 80:80
     depends_on:
       - webapp
     env_file:
-      - ./settings.env
+      - ../settings.env
   webapp:
     build:
-      context: ./frontend
+      context: ../frontend
       dockerfile: Dockerfile
     depends_on:
       - influxdb
@@ -22,14 +22,14 @@ services:
       - INFLUXDB_DATABASE=db0
     container_name: frontend
     env_file:
-      - ./settings.env
+      - ../settings.env
   backend:
     build:
-      context: ./backend
+      context: ../backend
       dockerfile: Dockerfile
     container_name: moniotor-backend-1
     env_file:
-      - ./settings.env
+      - ../settings.env
   influxdb:
     image: influxdb:latest
     ports:
@@ -43,4 +43,4 @@ services:
       - DOCKER_INFLUXDB_INIT_ORG=nuig
     container_name: moniotor-influxdb-1
     env_file:
-      - ./settings.env
+      - ../settings.env
