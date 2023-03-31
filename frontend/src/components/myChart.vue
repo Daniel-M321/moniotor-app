@@ -17,13 +17,12 @@
                 </div>
             </div>
             <Analytics v-bind:analyticInfo="analytics"/>
-            <!-- <scatterChart v-bind:resData="myChartScatter"/> -->
+            <multiChart v-if="ready" :resData="stats"/>
         </div>
         <div class="col-md-4">
             <div class="col cards">
                 <div class="col dataHeader active"> <b>Query</b></div>
                 
-                <div class="container my-5">
                     <table class="table">
                         <thead></thead> 
                         <tbody>
@@ -66,10 +65,9 @@
                             </tr>
                         </tbody>
                     </table>
-                </div>
             </div>
+            <errorList v-if="ready" :errorsArr="warnings"/>
             <dataAverages v-bind:data="stats"/>
-            <errorList v-bind:errorsArr="errors"/>
         </div>
     </div>
 </template>
@@ -77,7 +75,7 @@
 <script>
 import Analytics from './Analytic.vue';
 import dataAverages from './dataAverages.vue';
-//import scatterChart from './scatterChart.vue';
+import multiChart from './multiChart.vue';
 import errorList from './errorList.vue';
 import Charts from 'chart.js/auto';
 import axios from 'axios';
@@ -88,13 +86,12 @@ export default {
     components:{
         Analytics,
         dataAverages,
-        //scatterChart,
+        multiChart,
         errorList
     },
     data() {
         return {
             mainChart: null,
-            myChartScatter: [],
             sensorData: null,
             selected: "",
             ctx: null,
@@ -103,23 +100,33 @@ export default {
             endDate: String,
             period: "30",
             periodUnit: "Month(s)",
-            stats: [],
-            errors: [],
+            stats: {},
+            warnings: [],
+            ready: false
         }
     },
     async created() {
         var response = await this.queryRoute('Temperature')
-        this.stats.push(response.info.analytics)
+        this.stats.Temperature = response.info.analytics
+        this.warnings.push(response.info.analytics[4])
         this.buildMainChart('Temperature', response)
+
         response = await this.queryRoute('Humidity')
-        this.stats.push(response.info.analytics)
-        this.myChartScatter = response
+        this.stats.Humidity = response.info.analytics
+        this.warnings.push(response.info.analytics[4])
+
         response = await this.queryRoute('CO')
-        this.stats.push(response.info.analytics)
+        this.stats.CO = response.info.analytics
+        this.warnings.push(response.info.analytics[4])
+
         response = await this.queryRoute('LPG')
-        this.stats.push(response.info.analytics)
+        this.stats.LPG = response.info.analytics
+        this.warnings.push(response.info.analytics[4])
+        
         response = await this.queryRoute('Smoke')
-        this.stats.push(response.info.analytics)
+        this.stats.Smoke = response.info.analytics
+        this.warnings.push(response.info.analytics[4])
+        this.ready = true
     },
     methods: {
         async queryRoute(measurement) {

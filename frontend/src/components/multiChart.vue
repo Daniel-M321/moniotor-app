@@ -1,17 +1,9 @@
 <template>
     <div class="col cards">
-                <div class="col dataHeader active"> <b>Scatter Graph</b></div>
+                <div class="col dataHeader active"> <b>Gas Values</b></div>
 
                 <div class="container my-5">
-
-                    <canvas height="150" id="scatter-diagram"></canvas>
-
-                    <hr>
-                    <div class="row">
-                        <small class="col today active">{{ startDate }}</small>
-                        <small class="col compared text-muted disabled"> TO </small>
-                        <small class="col previous">{{ endDate }}</small>
-                    </div>
+                    <canvas height="150" id="multi-diagram"></canvas>
                 </div>
             </div>
 </template>
@@ -20,62 +12,72 @@
 import Charts from 'chart.js/auto';
 
 export default {
-    name:'scatterChart',
+    name:'multiChart',
     props: {
-        resData: [],
-        //measurement: String,
+        resData: {
+            type: {},
+            required: true
+        }
     },
     data() {
         return {
             mainChart: null,
             ctx: null,
-            startDate: String,
-            endDate: String,
         }
     },
-    watch: {
-        resData() {
-            // Call a method when resData changes
-            this.buildScatter()
-        }
+    mounted() {
+        this.buildMulti()
     },
     methods: {
-        buildScatter() {
+        buildMulti() {
             try {
-                const sensorData = this.resData.info
-
-                const dataTimes = Object.keys(sensorData.lineBarData)
-                this.startDate = dataTimes[0]
-                const dataLength = dataTimes.length
-                this.endDate = dataTimes[dataLength-1]
-                console.log(sensorData.scatterData)
-                
                 if(this.mainChart != null) {
                     this.mainChart.destroy()
                 }
                 else {
-                    this.ctx = document.getElementById('scatter-diagram').getContext("2d");
+                    this.ctx = document.getElementById('multi-diagram').getContext("2d");
                     var gradientFill = this.ctx.createLinearGradient(0,0,520,520);
                     gradientFill.addColorStop(0, 'red');
                 }
                 this.mainChart = new Charts(this.ctx, {
-                    type: 'scatter',
                     data: {
-                        labels: "dataTimes",
+                        labels: ["CO", "LPG", "Smoke"],
                         datasets: [{
-                            label: "Humidity",
-                            data: sensorData.scatterData,
-                            //borderColor: "#36495d",         //legend box colour
+                            type: 'bar',
+                            label: "Max Gas Values",
+                            data: [this.resData.CO[1], this.resData.LPG[1], this.resData.Smoke[1]],
                             borderWidth: 1,     // legend box width
-                        }]
+                            backgroundColor: [
+                                'rgba(204, 255, 204, 0.5)',
+                                'rgba(153, 255, 153, 0.5)',
+                                'rgba(102, 255, 102, 0.5)',
+                            ],  
+                        }, {
+                            type: 'line',
+                            label: "Average Gas Values",
+                            data: [this.resData.CO[3], this.resData.LPG[3], this.resData.Smoke[3]],
+                            borderWidth: 1,     // legend box width
+                            borderColor: 'rgb(255, 51, 51)',
+                            backgroundColor: 'rgb(255, 102, 102)'
+                        }],
                     },
                     options: {
+                        responsive: true,
+                        lineTension: 0.2,
                         scales: {
                             y: {
                                 title: {
                                     display: true,
-                                    text: "Humidity %"
+                                    text: "Gas (ppm)"
                                 },
+                            },
+                        },
+                        elements: {
+                            point: {
+                                pointBorderWidth: 4
+                            },
+                            line: {
+                                borderWidth: 3,
                             }
                         }
                     }
@@ -116,7 +118,8 @@ export default {
     border-radius: 30px;
     text-align: center;
     padding: 5px;
-    background-color: #6fdfcb;
+    background-color: #2996d1;
+    color: white;
 }
 div { /* fixes the issue with \n & \t not working in html */
       white-space: pre-wrap;

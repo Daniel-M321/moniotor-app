@@ -2,7 +2,7 @@
     <div class="col col-md-center">
         <div class="col card">
             <div class="col col-sm-center">
-                <div class="col dataHeader active"> <b>Analytical Data</b></div>
+                <div class="col dataHeader active"> <b>Analysis</b></div>
             </div>
             <div class="container my-5">
                 <p> {{ analyticInfo }} </p>

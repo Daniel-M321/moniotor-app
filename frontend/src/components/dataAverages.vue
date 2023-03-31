@@ -1,6 +1,6 @@
 <template>
     <div class="col cards">
-        <div class="col dataHeader active"> <b>Reading Averages</b></div>
+        <div class="col dataHeader active"> <b>Statistics</b></div>
         <div class="container my-5">
 
         <table class="table">
@@ -8,35 +8,35 @@
                 <tr>
                     <td>
                         <div class="mHeader">Temperature</div> 
-                        <p style="text-align: center;">Average = {{ data[0][3] }} C <b>|</b>  Max = {{ data[0][1] }} C <b>|</b> Min = {{ data[0][2] }} C</p>
+                        <p style="text-align: center;">Average = {{ data.Temperature[3] }} C <b>|</b>  Max = {{ data.Temperature[1] }} C <b>|</b> Min = {{ data.Temperature[2] }} C</p>
                     
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <div class="mHeader">Humidity</div> 
-                        <p style="text-align: center;">Average = {{ data[1][3] }} % <b>|</b> Max = {{ data[1][1] }} % <b>|</b> Min = {{ data[1][2] }} %</p>
+                        <p style="text-align: center;">Average = {{ data.Humidity[3] }} % <b>|</b> Max = {{ data.Humidity[1] }} % <b>|</b> Min = {{ data.Humidity[2] }} %</p>
                     
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <div class="mHeader">CO</div> 
-                        <p style="text-align: center;">Average = {{ data[2][3] }} ppm <b>|</b> Max = {{ data[2][1] }} ppm <b>|</b> Min = {{ data[2][2] }} ppm</p>
+                        <p style="text-align: center;">Average = {{ data.CO[3] }} ppm <b>|</b> Max = {{ data.CO[1] }} ppm <b>|</b> Min = {{ data.CO[2] }} ppm</p>
                     
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <div class="mHeader">LPG</div> 
-                        <p style="text-align: center;">Average = {{ data[3][3] }} ppm <b>|</b> Max = {{ data[3][1] }} ppm <b>|</b> Min = {{ data[3][2] }} ppm</p>
+                        <p style="text-align: center;">Average = {{ data.LPG[3] }} ppm <b>|</b> Max = {{ data.LPG[1] }} ppm <b>|</b> Min = {{ data.LPG[2] }} ppm</p>
                     
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <div class="mHeader">Smoke</div> 
-                        <p style="text-align: center;">Average = {{ data[4][3] }} ppm <b>|</b> Max = {{ data[4][1] }} ppm <b>|</b> Min = {{ data[4][2] }} ppm</p>
+                        <p style="text-align: center;">Average = {{ data.Smoke[3] }} ppm <b>|</b> Max = {{ data.Smoke[1] }} ppm <b>|</b> Min = {{ data.Smoke[2] }} ppm</p>
                     
                     </td>
                 </tr>
@@ -50,7 +50,7 @@
 export default {
     name:'dataAverages',
     props: {
-        data: [],
+        data: {},
     }
 }
 </script>

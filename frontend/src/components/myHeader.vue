@@ -4,7 +4,7 @@
             <div class="col col-lg-1"><img class="rounded-circle" height="80" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmG5p8UupmMVKs875O7bXQYyptCrL_lhnMC6YoIvjalCiN8mkKiYCtJJxFqP2RS4r7k-A&usqp=CAU" alt="Profile pic"></div>
             <div class="col pt-2 col-lg-8">
                 <h3>Welcome<hr></h3>
-                <a>Please enter a measurement and period for the data</a>
+                <a>Please enter a type and period for your data in the query box</a>
             </div>
             
             <div class="col pt-2 col-lg-3">
