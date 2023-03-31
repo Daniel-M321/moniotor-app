@@ -9,6 +9,8 @@ services:
       - 80:80
     depends_on:
       - webapp
+    envrionment:
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${DOCKER_INFLUXDB_INIT_ADMIN_TOKEN}
   webapp:
     build:
       context: ./frontend
@@ -20,8 +22,6 @@ services:
       - INFLUXDB_HOST=influxdb
       - INFLUXDB_PORT=8086
       - INFLUXDB_DATABASE=db0
-      - VUE_APP_BACKEND_URL=${VUE_APP_BACKEND_URL}
-      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${DOCKER_INFLUXDB_INIT_ADMIN_TOKEN}
     container_name: frontend
   backend:
     build:
@@ -58,6 +58,8 @@ services:
 #       - 80:80
 #     depends_on:
 #       - webapp
+#     env_file:
+#       - ./settings.env
 #   webapp:
 #     build:
 #       context: ./frontend

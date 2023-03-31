@@ -46,14 +46,12 @@ async function queryTime(req_params, queryApi) {
 //   }
 // }
 
-  const scatterData = [];
   const lineBarData = {};
   await queryApi
       .collectRows(fluxQuery /*, you can specify a row mapper as a second arg */)
       .then(data => {
           data.forEach((x) => {
               var time = dateFormatter(new Date(x._time))
-              scatterData.push({ x: x._time, y: x._value });
               lineBarData[time] = x._value
           })
           //console.log('\nCollect ROWS SUCCESS')
@@ -72,10 +70,11 @@ async function queryTime(req_params, queryApi) {
       analytics = analyseCO(lineBarData)
   else if(measurement == "LPG")
       analytics = analyseLPG(lineBarData)
-  else if(measurement == "Smoke")
+  else if(measurement == "Smoke"){
       analytics = analyseSmoke(lineBarData)
+  }
 
-  return ({ scatterData, lineBarData, analytics })
+  return ({ lineBarData, analytics })
 
 }
 

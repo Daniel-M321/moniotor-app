@@ -8,17 +8,18 @@ services:
       - 80:80
     depends_on:
       - webapp
+    env_file:
+      - ../settings.env
   webapp:
     build:
-        context: ../frontend
-        dockerfile: Dockerfile
+      context: ../frontend
+      dockerfile: Dockerfile
     depends_on:
       - influxdb
     environment:
       - INFLUXDB_HOST=influxdb
       - INFLUXDB_PORT=8086
       - INFLUXDB_DATABASE=db0
-      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${DOCKER_INFLUXDB_INIT_ADMIN_TOKEN}
     container_name: frontend
     env_file:
       - ../settings.env
@@ -26,9 +27,9 @@ services:
     build:
       context: ../backend
       dockerfile: Dockerfile
+    container_name: moniotor-backend-1
     env_file:
       - ../settings.env
-    container_name: moniotor-backend-1
   influxdb:
     image: influxdb:latest
     ports:
