@@ -9,7 +9,7 @@ services:
       - 80:80
     depends_on:
       - webapp
-    envrionment:
+    environment:
       - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${DOCKER_INFLUXDB_INIT_ADMIN_TOKEN}
   webapp:
     build:
