@@ -2,6 +2,20 @@ import test from 'unit.js';
 import {analyseBasic, analyseCO} from '../analyse.mjs'
 import {extraAnalysis} from "../assets/analyseText.mjs";
 
+const mockApiResponse = {
+    main: {
+      temp: 15,
+      humidity: 50
+    }
+};
+
+function mockFetch() {
+    return Promise.resolve({
+      json: () => Promise.resolve(mockApiResponse)
+    });
+}
+global.fetch = mockFetch;
+
 // tests for the analytic data that is sent back.
 
 describe('Temperature value analysis test', function(){
