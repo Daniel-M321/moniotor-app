@@ -11,5 +11,7 @@ const bucket = process.env['DOCKER_INFLUXDB_INIT_BUCKET'] || 'sensors'
 const username = process.env['DOCKER_INFLUXDB_INIT_USERNAME'] || 'admin'
 /**InfluxDB password  */
 const password = process.env['DOCKER_INFLUXDB_INIT_PASSWORD']
+/**OpenWeatherMap API key */
+const apiKey = process.env['WEATHER_API_KEY']
 
-export {url, token, org, bucket, username, password}
+export {url, token, org, bucket, username, password, apiKey}
