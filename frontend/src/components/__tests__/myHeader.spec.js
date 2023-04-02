@@ -9,5 +9,5 @@ describe('myHeader.vue Test', () => {
     const wrapper = shallowMount(myHeader, {})
 
     // check that the message is rendered
-    expect(wrapper.findAll('p').at(0).text()).toMatch('Please enter a measurement and period for the data')  })
+    expect(wrapper.findAll('a').at(0).text()).toMatch('Please enter a type and period for your data in the query box')  })
 })
