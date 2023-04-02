@@ -20,8 +20,8 @@ function analyseBasic(data, measurement, threshold, unit, warningPeriod=144){
         fatal: false,
         measurement: measurement
     }
-    const outsideTemp = null
-    const outsideHum = 0
+    var outsideTemp = null
+    var outsideHum = 0
 
     const apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=Galway&appid=" + apiKey + "&units=metric";
 
@@ -30,8 +30,8 @@ function analyseBasic(data, measurement, threshold, unit, warningPeriod=144){
         .then(data => {
           outsideTemp = data.main.temp;
           outsideHum = data.main.humidity;
-          console.log("Outside Temperature: ", temperature);
-          console.log("Outside Humidity: ", humidity);
+          console.log("Outside Temperature: ", outsideTemp);
+          console.log("Outside Humidity: ", outsideHum);
         })
         .catch(error => console.error(error));
 
@@ -132,11 +132,12 @@ function analyseBasic(data, measurement, threshold, unit, warningPeriod=144){
     if(measurement == "Humidity"){
         analytics += extraAnalysis.recommendedHum
         if (outsideHum != 0){
-            analytics += "\n\nTo help compare the data: Outside humidity in your location = "+outsideHum+unit
+            analytics += extraAnalysis.outsideHumidity+outsideHum+unit
         }
     }
     else if(measurement == "Temperature" && outsideTemp != null){
-        analytics += "\n\nTo help compare the data: Outside Temperatures in your location = "+outsideTemp+unit
+        analytics += extraAnalysis.outsideTemperature+outsideTemp+unit
+        console.log("here")
     }
 
     console.log(analytics)
