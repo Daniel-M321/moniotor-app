@@ -13,7 +13,7 @@ describe('Temperature value analysis test', function(){
         }, "Temperature", [10, 30], "*C")
 
         test.assert.equal(
-            tempAnalysis,
+            tempAnalysis[0],
             "Average Temperature in this selected period: 26*C. A minimum value of 23*C was found, and a maximum of 29*C"
         )
     })
@@ -26,7 +26,7 @@ describe('Temperature value analysis test', function(){
         }, "Temperature", [10, 30], "*C")
 
         test.assert.equal(
-            tempAnalysis,
+            tempAnalysis[0],
             "Average Temperature in this selected period: 32*C. A minimum value of 27*C was found, and a maximum of 36*C.\nWARNING: Excessive Temperature above 30*C has been detected at the following time(s):\n\t- From 14.53:12-2-2023 To 15.02:12-2-2023"
         )
     })
@@ -44,7 +44,7 @@ describe('Temperature value analysis test', function(){
         }, "Temperature", [10, 30], "*C", 1)
 
         test.assert.equal(
-            tempAnalysis,
+            tempAnalysis[0],
             "Average Temperature in this selected period: 9*C. A minimum value of 6*C was found, and a maximum of 13*C.\nWARNING: Excessive Temperature below 10*C has been detected at the following time(s):\n\t- From 14.53:12-2-2023 To 15.07:12-2-2023\n\t- From 15.12:12-2-2023 To 15.27:12-2-2023.\n\nThis excessive Temperature has been detected for over 0.017 hour(s), "+extraAnalysis.lowTemperature
         )
     })
@@ -59,7 +59,7 @@ describe('Humidity value analysis test', function(){
         }, "Humidity", [20, 75], "%")
 
         test.assert.equal(
-            humAnalysis,
+            humAnalysis[0],
             "Average Humidity in this selected period: 55%. A minimum value of 50% was found, and a maximum of 60%"+extraAnalysis.recommendedHum
         )
     })
@@ -72,7 +72,7 @@ describe('Humidity value analysis test', function(){
         }, "Humidity", [20, 75], "%")
 
         test.assert.equal(
-            humAnalysis,
+            humAnalysis[0],
             "Average Humidity in this selected period: 18%. A minimum value of 15% was found, and a maximum of 21%.\nWARNING: Excessive Humidity below 20% has been detected at the following time(s):\n\t- From 14.53:12-2-2023 To 15.02:12-2-2023"+extraAnalysis.recommendedHum
         )
     })
@@ -85,7 +85,7 @@ describe('Humidity value analysis test', function(){
         }, "Humidity", [20, 75], "%", 1)
 
         test.assert.equal(
-            humAnalysis,
+            humAnalysis[0],
             "Average Humidity in this selected period: 18%. A minimum value of 15% was found, and a maximum of 21%.\nWARNING: Excessive Humidity below 20% has been detected at the following time(s):\n\t- From 14.53:12-2-2023 To 15.02:12-2-2023.\n\nThis excessive Humidity has been detected for over 0.017 hour(s), "+extraAnalysis.lowHumidity+extraAnalysis.recommendedHum
         )
     })
@@ -99,7 +99,7 @@ describe('CO levels analysis test', function(){
         })
 
         test.assert.equal(
-            COAnalysis,
+            COAnalysis[0],
             "ACTION IS NEEDED. WARNING: Excessive CO levels above 25ppm has been detected at the following time(s):\n\t- From 14.57:12-2-2023 To end of results.\nElevated Co levels have been detected at 15.02:12-2-2023\nAverage CO levels in this selected period: 43ppm. A minimum value of 20ppm was found, and a maximum of 55ppm"
         )
     })
