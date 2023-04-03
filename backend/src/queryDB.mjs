@@ -63,7 +63,7 @@ async function queryTime(req_params, queryApi) {
 
   var analytics = ""
   if(measurement == "Temperature")
-      analytics = await analyseBasic(lineBarData, measurement, [10, 30], "*C") // probs better to do all analysis in above loop^, so not looping twice.
+      analytics = await analyseBasic(lineBarData, measurement, [10, 30], "°C") // probs better to do all analysis in above loop^, so not looping twice.
   else if(measurement == "Humidity")
       analytics = await analyseBasic(lineBarData, measurement, [20, 75], "%")
   else if(measurement == "CO")
