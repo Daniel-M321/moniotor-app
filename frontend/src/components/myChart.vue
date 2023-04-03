@@ -106,29 +106,35 @@ export default {
         }
     },
     async created() {
-        var response = await this.queryRoute('Temperature')
-        this.stats.Temperature = response.info.analytics
-        this.warnings.push(response.info.analytics[4])
-        this.buildMainChart('Temperature', response)
+        const res = await this.creation()
+        this.buildMainChart('Temperature', res)
 
-        response = await this.queryRoute('Humidity')
-        this.stats.Humidity = response.info.analytics
-        this.warnings.push(response.info.analytics[4])
-
-        response = await this.queryRoute('CO')
-        this.stats.CO = response.info.analytics
-        this.warnings.push(response.info.analytics[4])
-
-        response = await this.queryRoute('LPG')
-        this.stats.LPG = response.info.analytics
-        this.warnings.push(response.info.analytics[4])
-        
-        response = await this.queryRoute('Smoke')
-        this.stats.Smoke = response.info.analytics
-        this.warnings.push(response.info.analytics[4])
         this.ready = true
     },
     methods: {
+        async creation(){
+            var responseT = await this.queryRoute('Temperature')
+            this.stats.Temperature = responseT.info.analytics
+            this.warnings.push(responseT.info.analytics[4])
+
+            var response = await this.queryRoute('Humidity')
+            this.stats.Humidity = response.info.analytics
+            this.warnings.push(response.info.analytics[4])
+
+            response = await this.queryRoute('CO')
+            this.stats.CO = response.info.analytics
+            this.warnings.push(response.info.analytics[4])
+
+            response = await this.queryRoute('LPG')
+            this.stats.LPG = response.info.analytics
+            this.warnings.push(response.info.analytics[4])
+            
+            response = await this.queryRoute('Smoke')
+            this.stats.Smoke = response.info.analytics
+            this.warnings.push(response.info.analytics[4])
+
+            return responseT
+        },
         async queryRoute(measurement) {
             try {
                 const { data } = await axios.get('http://moniotor.eu-west-1.elasticbeanstalk.com/api', {

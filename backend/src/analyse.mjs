@@ -1,7 +1,8 @@
 import {extraAnalysis} from "./assets/analyseText.mjs";
+import {apiKey} from '../env.mjs'
 
 
-function analyseBasic(data, measurement, threshold, unit, warningPeriod=144){
+async function analyseBasic(data, measurement, threshold, unit, warningPeriod=144){
     var average = 0
     var max = null
     var min = null
@@ -19,6 +20,20 @@ function analyseBasic(data, measurement, threshold, unit, warningPeriod=144){
         fatal: false,
         measurement: measurement
     }
+    var outsideTemp = null
+    var outsideHum = 0
+
+    const apiUrl = "https://api.openweathermap.org/data/2.5/weather?lat=53.61&lon=-8.90&appid=" + apiKey + "&units=metric";
+
+    await fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+          outsideTemp = data.main.temp;
+          outsideHum = data.main.humidity;
+          console.log(measurement+" = sensor. Outside Temperature: ", outsideTemp);
+          console.log("Outside Humidity: ", outsideHum);
+        })
+        .catch(error => console.error(error));
 
     const dataLength = Object.keys(data).length
 
@@ -116,6 +131,12 @@ function analyseBasic(data, measurement, threshold, unit, warningPeriod=144){
     
     if(measurement == "Humidity"){
         analytics += extraAnalysis.recommendedHum
+        if (outsideHum != 0){
+            analytics += extraAnalysis.outsideHumidity+outsideHum+unit
+        }
+    }
+    else if(measurement == "Temperature" && outsideTemp != null){
+        analytics += extraAnalysis.outsideTemperature+outsideTemp+unit
     }
 
     console.log(analytics)
