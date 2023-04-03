@@ -1,6 +1,5 @@
 import {extraAnalysis} from "./assets/analyseText.mjs";
 import {apiKey} from '../env.mjs'
-import {apiKey} from '../env.mjs'
 
 
 async function analyseBasic(data, measurement, threshold, unit, warningPeriod=144){
