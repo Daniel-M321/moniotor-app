@@ -209,7 +209,7 @@ export default {
         },
         getUnit(measurement){
             if(measurement == "Temperature") {
-                return " (*C)"
+                return " (°C)"
             } else if(measurement == "Humidity") {
                 return " (%)"
             } else {

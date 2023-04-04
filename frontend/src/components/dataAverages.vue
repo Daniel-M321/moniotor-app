@@ -8,7 +8,7 @@
                 <tr>
                     <td>
                         <div class="mHeader">Temperature</div> 
-                        <p style="text-align: center;">Average = {{ data.Temperature[3] }} C <b>|</b>  Max = {{ data.Temperature[1] }} C <b>|</b> Min = {{ data.Temperature[2] }} C</p>
+                        <p style="text-align: center;">Average = {{ data.Temperature[3] }} °C <b>|</b>  Max = {{ data.Temperature[1] }} °C <b>|</b> Min = {{ data.Temperature[2] }} °C</p>
                     
                     </td>
                 </tr>
