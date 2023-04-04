@@ -133,6 +133,9 @@ export default {
             this.stats.Smoke = response.info.analytics
             this.warnings.push(response.info.analytics[4])
 
+            response = await this.queryRoute('Water')
+            this.warnings.push(response.info)
+
             return responseT
         },
         async queryRoute(measurement) {

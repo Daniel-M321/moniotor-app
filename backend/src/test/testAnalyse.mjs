@@ -114,7 +114,7 @@ describe('CO levels analysis test', function(){
 
         test.assert.equal(
             COAnalysis[0],
-            "ACTION IS NEEDED. WARNING: Excessive CO levels above 25ppm has been detected at the following time(s):\n\t- From 14.57:12-2-2023 To end of results.\nElevated Co levels have been detected at 15.02:12-2-2023\nAverage CO levels in this selected period: 43ppm. A minimum value of 20ppm was found, and a maximum of 55ppm"
+            "ACTION IS NEEDED. WARNING: Excessive CO levels above 25ppm has been detected at the following time(s):\n\t- From 14.57:12-2-2023 To end of results.\nElevated CO levels have been detected at 15.02:12-2-2023\nAverage CO levels in this selected period: 43ppm. A minimum value of 20ppm was found, and a maximum of 55ppm"
         )
     })
 })

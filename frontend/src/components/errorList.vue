@@ -34,7 +34,7 @@ export default {
     methods: {
         buildLogs() {
             try{
-                for (var i = 0; i < this.errorsArr.length; i++) {
+                for (var i = 0; i <= this.errorsArr.length-1; i++) {
                     if(!this.errorsArr[i].high && !this.errorsArr[i].low){
                         continue
                     }
@@ -50,6 +50,11 @@ export default {
                         warning+="Low values have been detected."
                     }
                     this.text[this.errorsArr[i].measurement] = warning
+                }
+
+                const indexL = this.errorsArr.length-1
+                if(Object.keys(this.errorsArr[indexL].lineBarData).length > 0){
+                    this.text["Water"] = "Water has been detected at "+Object.keys(this.errorsArr[indexL].lineBarData)[0]+" in the "+this.errorsArr[indexL].analytics[0]
                 }
             } catch (e) {
                 console.error(e)
