@@ -47,12 +47,14 @@ async function queryTime(req_params, queryApi) {
 // }
 
   const lineBarData = {};
+  var location = ""
   await queryApi
       .collectRows(fluxQuery /*, you can specify a row mapper as a second arg */)
       .then(data => {
           data.forEach((x) => {
               var time = dateFormatter(new Date(x._time))
               lineBarData[time] = x._value
+              location = x.location
           })
           //console.log('\nCollect ROWS SUCCESS')
       })
@@ -61,7 +63,7 @@ async function queryTime(req_params, queryApi) {
           console.log('\nCollect ROWS ERROR')
       })
 
-  var analytics = ""
+  var analytics = []
   if(measurement == "Temperature")
       analytics = await analyseBasic(lineBarData, measurement, [10, 30], "°C") // probs better to do all analysis in above loop^, so not looping twice.
   else if(measurement == "Humidity")
@@ -72,6 +74,9 @@ async function queryTime(req_params, queryApi) {
       analytics = analyseLPG(lineBarData)
   else if(measurement == "Smoke"){
       analytics = analyseSmoke(lineBarData)
+  }
+  else if(measurement == "Water"){
+      analytics.push(location)
   }
 
   return ({ lineBarData, analytics })
