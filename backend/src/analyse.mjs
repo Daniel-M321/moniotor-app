@@ -61,7 +61,7 @@ async function analyseBasic(data, measurement, threshold, unit, warningPeriod=12
             if(highCounter > highStreak){
                 highStreak = highCounter
             }
-            highDataTime[highDataTime.length - 1] = Object.keys(data)[i] // adding end time
+            highDataTime[highDataTime.length - 1] = Object.keys(data)[i-1] // adding end time
             highCounter = 0
         }
 
@@ -79,15 +79,15 @@ async function analyseBasic(data, measurement, threshold, unit, warningPeriod=12
             if(lowCounter > lowStreak){
                 lowStreak = lowCounter
             }
-            lowDataTime[lowDataTime.length - 1] = Object.keys(data)[i] // adding end time
+            lowDataTime[lowDataTime.length - 1] = Object.keys(data)[i-1] // adding end time
             lowCounter = 0
         }
     }
 
-    const hours = (warningPeriod/60).toFixed(3)
+    const hours = (warningPeriod/12).toFixed(2)
     if(max > threshold[1]) {
 
-        dataWarning = ".\nWARNING: Excessive "+measurement+" above "+threshold[1]+unit+" has been detected at the following time(s):"
+        dataWarning += "WARNING: Excessive "+measurement+" above "+threshold[1]+unit+" has been detected at the following time(s):"
         while(highDataTime.length > 1){
             dataWarning += "\n\t- From "+highDataTime.shift()+" To "+highDataTime.shift()
         }
@@ -97,7 +97,7 @@ async function analyseBasic(data, measurement, threshold, unit, warningPeriod=12
         if(highStreak > warningPeriod){ // readings are every five mins, default = 144 five mins are in 12 hours.
             errors.high = true
 
-            dataWarning += ".\n\nThis excessive "+measurement+" has been detected for over "+hours+" hour(s), "
+            dataWarning += ".\nThis excessive "+measurement+" has been detected for over "+hours+" hour(s), "
             if(measurement == "Humidity"){
                 dataWarning += extraAnalysis.highHumidity
             }
@@ -107,8 +107,11 @@ async function analyseBasic(data, measurement, threshold, unit, warningPeriod=12
         }
     }
     if(min < threshold[0]) {
+        if(dataWarning != ""){
+            dataWarning += "\n\n"
+        }
 
-        dataWarning = ".\nWARNING: Excessive "+measurement+" below "+threshold[0]+unit+" has been detected at the following time(s):"
+        dataWarning += "WARNING: Excessive "+measurement+" below "+threshold[0]+unit+" has been detected at the following time(s):"
         while(lowDataTime.length > 1){
             dataWarning += "\n\t- From "+lowDataTime.shift()+" To "+lowDataTime.shift()
         }
@@ -118,7 +121,7 @@ async function analyseBasic(data, measurement, threshold, unit, warningPeriod=12
         if(lowStreak > warningPeriod){ // readings are every five mins, 12 five mins are in 1 hour.
             errors.low = true
 
-            dataWarning += ".\n\nThis excessive "+measurement+" has been detected for over "+hours+" hour(s), "
+            dataWarning += ".\nThis excessive "+measurement+" has been detected for over "+hours+" hour(s), "
             if(measurement == "Humidity"){
                 dataWarning += extraAnalysis.lowHumidity
             }
@@ -128,8 +131,12 @@ async function analyseBasic(data, measurement, threshold, unit, warningPeriod=12
         }
     }
 
+    if(dataWarning != ""){
+        dataWarning += "\n\n"
+    }
+
     average = Math.round(average/dataLength)
-    analytics = "Average "+measurement+" in this selected period: "+average+unit+". A minimum value of "+min+unit+" was found, and a maximum of "+max+unit+dataWarning
+    analytics = dataWarning+"Average "+measurement+" in this selected period: "+average+unit+". A minimum value of "+min+unit+" was found, and a maximum of "+max+unit
     
     if(measurement == "Humidity"){
         analytics += extraAnalysis.recommendedHum
@@ -152,7 +159,6 @@ function analyseLPG(data, warningPeriod=6){
     var analytics = ""
     var LPGWarning = ""
     var highLPGTime = []
-    var mildWarning = ""
     var highCounter = 0
     var highStreak = 0
     var direWarning = ""
@@ -184,7 +190,7 @@ function analyseLPG(data, warningPeriod=6){
                 fatalCounter++
                 if(fatalCounter > 3){
                     errors.fatal = true
-                    direWarning = "WARNING: LPG levels have exceeded safe limits, Please take immediate actions. A measure of "+point+"ppm of LPG has been measured in your home, this has the potential to be fatal!"
+                    direWarning = "WARNING: LPG levels have exceeded safe limits, PLEASE take immediate actions. A measure of "+point+"ppm of LPG has been measured in your home, this has the potential to be FATAL!\n\n"
                 }
             }
             else{
@@ -194,16 +200,13 @@ function analyseLPG(data, warningPeriod=6){
                 highLPGTime.push(Object.keys(data)[i])  // adding start time
                 highLPGTime.push("end of results.")
             }
-            if(point > 30){
-                mildWarning = "\nElevated LPG levels have been detected at "+Object.keys(data)[i]
-            }
             highCounter++                           // counter on how long there has been high data in one sitting
         }
         else if(highCounter > 0){                   // if data goes below threshold, reset counter
             if(highCounter > highStreak){
                 highStreak = highCounter
             }
-            highLPGTime[highLPGTime.length - 1] = Object.keys(data)[i] // adding end time
+            highLPGTime[highLPGTime.length - 1] = Object.keys(data)[i-1] // adding end time
             highCounter = 0
         }
 
@@ -224,10 +227,9 @@ function analyseLPG(data, warningPeriod=6){
         if(highStreak > warningPeriod){ // readings are every five mins, default = 6 five mins are in 1/2 hour.
             errors.high = true
 
-            LPGWarning += "\n\nThese excessive LPG levels has been detected for over "+(warningPeriod/60).toFixed(3)+" hour(s), Action is needed to prevent physical symptons. "
+            LPGWarning += "\n\nThese excessive LPG levels has been detected for over "+(warningPeriod/12).toFixed(2)+" hour(s), Action is needed to prevent physical symptons. "
             LPGWarning += extraAnalysis.dangerousLPG
         }
-        LPGWarning += mildWarning+"\n"
     }
     else if(diff > 10){                         // no need to talk about difference if emergency action is needed.
         LPGWarning = "Warning: LPG levels have been rising over this period. "+extraAnalysis.risingLPG
@@ -235,13 +237,13 @@ function analyseLPG(data, warningPeriod=6){
     else if(diff < -5){
         analytics += "LPG levels have fallen this period. This is a good outcome.\n"
     }
+    
+    if(LPGWarning != ""){
+        LPGWarning += "\n\n"
+    }
 
     average = Math.round(average/dataLength)
-    analytics += LPGWarning+"Average LPG levels in this selected period: "+average+"ppm. A minimum value of "+min+"ppm was found, and a maximum of "+max+"ppm"
-
-    if(direWarning != ""){
-        analytics = direWarning
-    }
+    analytics += direWarning+LPGWarning+"Average LPG levels in this selected period: "+average+"ppm. A minimum value of "+min+"ppm was found, and a maximum of "+max+"ppm"
 
     console.log(analytics)
     return [analytics, max, min, average, errors]
@@ -254,7 +256,6 @@ function analyseSmoke(data, warningPeriod=6){
     var analytics = ""
     var Warning = ""
     var highTime = []
-    var mildWarning = ""
     var highCounter = 0
     var highStreak = 0
     var direWarning = ""
@@ -286,7 +287,7 @@ function analyseSmoke(data, warningPeriod=6){
                 fatalCounter++
                 if(fatalCounter > 3){
                     errors.fatal = true
-                    direWarning = "WARNING: Smoke levels have exceeded safe limits, Please take immediate actions. A measure of "+point+"ppm of Smoke has been measured in your home, this has the potential to be fatal!"
+                    direWarning = "WARNING: Smoke levels have exceeded safe limits, PLEASE take immediate actions. A measure of "+point+"ppm of Smoke has been measured in your home, this has the potential to be FATAL!\n\n"
                 }
             }
             else{
@@ -296,16 +297,13 @@ function analyseSmoke(data, warningPeriod=6){
                 highTime.push(Object.keys(data)[i])  // adding start time
                 highTime.push("end of results.")
             }
-            if(point > 300){
-                mildWarning = "\nElevated Smoke levels have been detected at "+Object.keys(data)[i]
-            }
             highCounter++                           // counter on how long there has been high data in one sitting
         }
         else if(highCounter > 0){                   // if data goes below threshold, reset counter
             if(highCounter > highStreak){
                 highStreak = highCounter
             }
-            highTime[highTime.length - 1] = Object.keys(data)[i] // adding end time
+            highTime[highTime.length - 1] = Object.keys(data)[i-1] // adding end time
             highCounter = 0
         }
 
@@ -326,10 +324,9 @@ function analyseSmoke(data, warningPeriod=6){
         if(highStreak > warningPeriod){ // readings are every five mins, default = 6 five mins are in 1/2 hour.
             errors.high = true
 
-            Warning += "\n\nThese excessive Smoke levels has been detected for over "+(warningPeriod/60).toFixed(3)+" hour(s), Action is needed to prevent physical symptons. "
+            Warning += "\n\nThese excessive Smoke levels has been detected for over "+(warningPeriod/12).toFixed(2)+" hour(s), Action is needed to prevent physical symptons. "
             Warning += extraAnalysis.dangerousSmoke
         }
-        Warning += mildWarning+"\n"
     }
     else if(diff > 30){                         // no need to talk about difference if emergency action is needed.
         Warning = "Warning: Smoke levels have been rising over this period. "+extraAnalysis.risingSmoke
@@ -338,12 +335,11 @@ function analyseSmoke(data, warningPeriod=6){
         analytics += "Smoke levels have fallen this period. This is a good outcome.\n"
     }
 
-    average = Math.round(average/dataLength)
-    analytics += Warning+"Average Smoke levels in this selected period: "+average+"ppm. A minimum value of "+min+"ppm was found, and a maximum of "+max+"ppm"
-
-    if(direWarning != ""){
-        analytics = direWarning
+    if(Warning != ""){
+        Warning += "\n\n"
     }
+    average = Math.round(average/dataLength)
+    analytics += direWarning+Warning+"Average Smoke levels in this selected period: "+average+"ppm. A minimum value of "+min+"ppm was found, and a maximum of "+max+"ppm"
 
     console.log(analytics)
     return [analytics, max, min, average, errors]
@@ -356,7 +352,6 @@ function analyseCO(data, warningPeriod=6){
     var analytics = ""
     var COWarning = ""
     var highCOTime = []
-    var mildWarning = ""
     var highCounter = 0
     var highStreak = 0
     var direWarning = ""
@@ -388,7 +383,7 @@ function analyseCO(data, warningPeriod=6){
                 fatalCounter++
                 if(fatalCounter > 3){
                     errors.fatal = true
-                    direWarning = "WARNING: CO levels have exceeded safe limits, Please take immediate actions. A measure of "+point+"ppm of CO has been measured in your home, this has the potential to be fatal!"
+                    direWarning = "WARNING: CO levels have exceeded safe limits, PLEASE take immediate actions. A measure of "+point+"ppm of CO has been measured in your home, this has the potential to be FATAL!\n\n"
                 }
             }
             else{
@@ -398,16 +393,13 @@ function analyseCO(data, warningPeriod=6){
                 highCOTime.push(Object.keys(data)[i])  // adding start time
                 highCOTime.push("end of results.")
             }
-            if(point > 50){
-                mildWarning = "\nElevated CO levels have been detected at "+Object.keys(data)[i]
-            }
             highCounter++                           // counter on how long there has been high data in one sitting
         }
         else if(highCounter > 0){                   // if data goes below threshold, reset counter
             if(highCounter > highStreak){
                 highStreak = highCounter
             }
-            highCOTime[highCOTime.length - 1] = Object.keys(data)[i] // adding end time
+            highCOTime[highCOTime.length - 1] = Object.keys(data)[i-1] // adding end time
             highCounter = 0
         }
 
@@ -428,10 +420,9 @@ function analyseCO(data, warningPeriod=6){
         if(highStreak > warningPeriod){ // readings are every five mins, default = 6 five mins are in 1/2 hour.
             errors.high = true
 
-            COWarning += "\n\nThese excessive CO levels has been detected for over "+(warningPeriod/60).toFixed(3)+" hour(s), Action is needed to prevent physical symptons. "
+            COWarning += "\n\nThese excessive CO levels has been detected for over "+(warningPeriod/12).toFixed(2)+" hour(s), Action is needed to prevent physical symptons. "
             COWarning += extraAnalysis.dangerousCO
         }
-        COWarning += mildWarning+"\n"
     }
     else if(diff > 10){                         // no need to talk about difference if emergency action is needed.
         COWarning = "Warning: CO levels have been rising over this period. "+extraAnalysis.risingCO
@@ -441,11 +432,10 @@ function analyseCO(data, warningPeriod=6){
     }
 
     average = Math.round(average/dataLength)
-    analytics += COWarning+"Average CO levels in this selected period: "+average+"ppm. A minimum value of "+min+"ppm was found, and a maximum of "+max+"ppm"
-
-    if(direWarning != ""){
-        analytics = direWarning
+    if(COWarning != ""){
+        COWarning += "\n\n"
     }
+    analytics += direWarning+COWarning+"Average CO levels in this selected period: "+average+"ppm. A minimum value of "+min+"ppm was found, and a maximum of "+max+"ppm"
 
     console.log(analytics)
     return [analytics, max, min, average, errors]
