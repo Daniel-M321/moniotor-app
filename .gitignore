@@ -2,6 +2,7 @@
 node_modules
 /dist
 aws/
+test*.txt
 
 
 # local env files
