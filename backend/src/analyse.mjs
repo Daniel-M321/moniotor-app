@@ -190,7 +190,7 @@ function analyseLPG(data, warningPeriod=6){
                 fatalCounter++
                 if(fatalCounter > 3){
                     errors.fatal = true
-                    direWarning = "WARNING: LPG levels have exceeded safe limits, Please take immediate actions. A measure of "+point+"ppm of LPG has been measured in your home, this has the potential to be fatal!"
+                    direWarning = "WARNING: LPG levels have exceeded safe limits, PLEASE take immediate actions. A measure of "+point+"ppm of LPG has been measured in your home, this has the potential to be FATAL!\n\n"
                 }
             }
             else{
@@ -243,11 +243,7 @@ function analyseLPG(data, warningPeriod=6){
     }
 
     average = Math.round(average/dataLength)
-    analytics += LPGWarning+"Average LPG levels in this selected period: "+average+"ppm. A minimum value of "+min+"ppm was found, and a maximum of "+max+"ppm"
-
-    if(direWarning != ""){
-        analytics = direWarning
-    }
+    analytics += direWarning+LPGWarning+"Average LPG levels in this selected period: "+average+"ppm. A minimum value of "+min+"ppm was found, and a maximum of "+max+"ppm"
 
     console.log(analytics)
     return [analytics, max, min, average, errors]
@@ -291,7 +287,7 @@ function analyseSmoke(data, warningPeriod=6){
                 fatalCounter++
                 if(fatalCounter > 3){
                     errors.fatal = true
-                    direWarning = "WARNING: Smoke levels have exceeded safe limits, Please take immediate actions. A measure of "+point+"ppm of Smoke has been measured in your home, this has the potential to be fatal!"
+                    direWarning = "WARNING: Smoke levels have exceeded safe limits, PLEASE take immediate actions. A measure of "+point+"ppm of Smoke has been measured in your home, this has the potential to be FATAL!\n\n"
                 }
             }
             else{
@@ -343,11 +339,7 @@ function analyseSmoke(data, warningPeriod=6){
         Warning += "\n\n"
     }
     average = Math.round(average/dataLength)
-    analytics += Warning+"\nAverage Smoke levels in this selected period: "+average+"ppm. A minimum value of "+min+"ppm was found, and a maximum of "+max+"ppm"
-
-    if(direWarning != ""){
-        analytics = direWarning
-    }
+    analytics += direWarning+Warning+"Average Smoke levels in this selected period: "+average+"ppm. A minimum value of "+min+"ppm was found, and a maximum of "+max+"ppm"
 
     console.log(analytics)
     return [analytics, max, min, average, errors]
@@ -391,7 +383,7 @@ function analyseCO(data, warningPeriod=6){
                 fatalCounter++
                 if(fatalCounter > 3){
                     errors.fatal = true
-                    direWarning = "WARNING: CO levels have exceeded safe limits, Please take immediate actions. A measure of "+point+"ppm of CO has been measured in your home, this has the potential to be fatal!"
+                    direWarning = "WARNING: CO levels have exceeded safe limits, PLEASE take immediate actions. A measure of "+point+"ppm of CO has been measured in your home, this has the potential to be FATAL!\n\n"
                 }
             }
             else{
@@ -443,11 +435,7 @@ function analyseCO(data, warningPeriod=6){
     if(COWarning != ""){
         COWarning += "\n\n"
     }
-    analytics += COWarning+"Average CO levels in this selected period: "+average+"ppm. A minimum value of "+min+"ppm was found, and a maximum of "+max+"ppm"
-
-    if(direWarning != ""){
-        analytics = direWarning
-    }
+    analytics += direWarning+COWarning+"Average CO levels in this selected period: "+average+"ppm. A minimum value of "+min+"ppm was found, and a maximum of "+max+"ppm"
 
     console.log(analytics)
     return [analytics, max, min, average, errors]
