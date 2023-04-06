@@ -8,12 +8,16 @@ npm install
 
 ### Fake data for influx for testing (line protocol)
 ```
-Temperature,location=kitchen temperature=25 1679662592
-Temperature,location=kitchen temperature=28 1679661592
-Temperature,location=kitchen temperature=30 1679660592
-Temperature,location=kitchen temperature=24 1679659592
-Temperature,location=kitchen temperature=21 1679658592
-Temperature,location=kitchen temperature=26 1679657592
+Humidity,location=Kitchen humidity=17 1679662592
+Humidity,location=Kitchen humidity=17 1679661592
+Humidity,location=Kitchen humidity=17 1679660592
+Humidity,location=Kitchen humidity=17 1679659592
+Humidity,location=Kitchen humidity=17 1679658592
+Humidity,location=Kitchen humidity=17 1679657592
+Humidity,location=Kitchen humidity=17 1679656592
+Humidity,location=Kitchen humidity=17 1679655592
+Humidity,location=Kitchen humidity=17 1679654592
+Humidity,location=Kitchen humidity=17 1679653592
 ```
 Make sure to update timestamps if needed.
 
