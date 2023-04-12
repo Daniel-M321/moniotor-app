@@ -1,4 +1,4 @@
-# moniotor
+# Moniotor frontend
 
 ## Project setup
 ```
