@@ -25,6 +25,7 @@ CO,location=Kitchen co=27 1679649592
 ```
 Make sure to update timestamps if needed.
 
+## Frontend UI
 **If just testing frontend Run these commands in frontend directory.**
 ### Compiles and hot-reloads for development
 ```
@@ -40,11 +41,14 @@ npm run build
 ```
 npm run lint
 ```
-
+## App
 **Else just run ```docker compose up``` at root**
 
+## Build
+Buildspec.yml contains the instructions for AWS to use when building the application.
+
 ## N.B. If running locally
-Need to change axios.get() url to "http://localhost/api", in ```src\components\myChart.vue``` line 76. Check `nginx` folder if lost. And uncomment "local" section in compose file or use compose in `docker_dev`
+Check `nginx` folder if lost with any routing. And uncomment "local" section in compose file or use compose in `docker_dev`
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
